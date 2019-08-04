@@ -11,10 +11,11 @@ import {
   StyleSheet,
   View,
   Text,
-  TextInput,
   TouchableOpacity,
 } from 'react-native';
 import API from '../api.js';
+import TextboxInput from '../components/TextboxInput';
+import Link from '../components/Link';
 
 const styles = StyleSheet.create({
   container: {
@@ -29,46 +30,53 @@ class LoginScreen extends Component {
       email: '',
       password: '',
     };
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
-  onSubmit = (event) => {
+  async onSubmit (event) {
     event.preventDefault();
     const { email, password } = this.state;
-    API.post('/auth/login', { email, password })
-      .then((res) => {
-        Alert.alert(
-          'Success', JSON.stringify(res.data)
-        );
-      })
-      .catch((error) => {
-        Alert.alert(
-          'Failed', JSON.stringify(error.response.data)
-        )
-      })
+    try {
+      const { data } = await API.post('/auth/login', { email, password });
+      Alert.alert(
+        'Success', JSON.stringify(data)
+      );
+      await AsyncStorage.setItem('token', data.token);
+      // 토큰을 저장
+      this.props.navigation.navigate('home');
+      // 홈으로
+    } catch (error) {
+      Alert.alert(
+        '로그인 실패', JSON.stringify(error.response.data)
+      );
+    };
   };
 
   render() {
     return (
       <View style={styles.container}>
         <Text>LOGIN</Text>
-        <TextInput
-          editable={true}
-          onChangeText={(email) => this.setState({email})}
+        <TextboxInput
           value={this.state.email}
-          autoCompleteType={"email"}
+          type={'email'}
+          onChangeText={(email) => this.setState({email})}
+          placeholder="이메일"
         />
-        <TextInput
-          secureTextEntry={true}
-          editable={true}
-          onChangeText={(password) => this.setState({password})}
+        <TextboxInput
           value={this.state.password}
-          autoCompleteType={"password"}
+          type={'password'}
+          onChangeText={(password) => this.setState({password})}
+          placeholder="패스워드"
         />
         <TouchableOpacity
           onPress={this.onSubmit}
         >
           <Text>로그인</Text>
         </TouchableOpacity>
+        <Link
+          routeName="Join"
+          text="회원가입"
+        />
       </View>
     );
   }

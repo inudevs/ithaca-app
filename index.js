@@ -2,24 +2,30 @@
  * @format
  */
 
-// import React from 'react';
+import React from 'react';
 import { AppRegistry, /* Animated, Easing */ } from 'react-native';
 import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 import { name as appName } from './app.json';
 import {
   LoginScreen,
+  JoinScreen,
+  HomeScreen,
 } from './screens';
-
-// const defaultNavigationOptions = () => ({
-//   header: props => <DefaultHeader {...props} />
-// })
 
 const AppNavigator = createStackNavigator(
   {
     Login: {
       screen: LoginScreen,
-    //   navigationOptions: defaultNavigationOptions
+      navigationOptions: { title: '로그인' },
+    },
+    Join: {
+      screen: JoinScreen,
+      navigationOptions: { title: '회원가입' },
+    },
+    Home: {
+      screen: HomeScreen,
+      navigationOptions: { title: '질문 목록' },
     },
   },
   {
