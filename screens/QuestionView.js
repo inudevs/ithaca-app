@@ -1,5 +1,5 @@
 /**
- * HomeScreen
+ * QuestionView
  *
  * @format
  * @flow
@@ -20,6 +20,7 @@ import API from '../api';
 import moment from '../time.js';
 import Navbar from '../components/Navbar';
 import FilterButton from '../components/FilterButton';
+import { QuestionView } from '.';
 
 const win = Dimensions.get('window');
 
@@ -133,11 +134,11 @@ const exampleQuestionData = [
   },
 ]
 
-class HomeScreen extends Component {
+class QuestionView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      questions: exampleQuestionData,
+      
     };
   }
 
@@ -146,42 +147,7 @@ class HomeScreen extends Component {
     return (
       <View style={styles.container}>
         <ScrollView>
-          <View style={styles.questions}>
-            {this.state.questions.map((item, idx) => (
-              <View
-                style={[(idx === this.state.questions.length - 1) ? styles.questionLast: styles.question ]}
-                key={idx}
-              >              
-                <Text style={styles.title}>
-                  <Text style={styles.category}>{item.category}</Text>
-                  <Text style={styles.blank}> </Text>
-                  {item.title}
-                </Text>
-                <View style={styles.meta}>
-                  <Text style={styles.name}>{item.user.name}</Text>
-                  <Text style={styles.timestamp}>{moment.unix(item.timestamp).fromNow()}</Text>
-                  <Text style={styles.status}>
-                    {(item.status=='P') ? '진행중' : '완료'}
-                  </Text>
-                </View>
-                <Image
-                  // source={{uri: item.photo}}
-                  source={item.image}
-                  resizeMode="cover"
-                  style={styles.photo}
-                />
-                <View style={styles.footer}>
-                  <Text style={styles.requests}>답변 {item.requests}</Text>
-                  <Text style={styles.views}>
-                    <Image
-                      source={require('../assets/icons/eye.png')}
-                      style={styles.eye}
-                    /> {item.views}
-                  </Text>
-                </View>
-              </View>
-            ))}
-          </View>
+          
         </ScrollView>
         <FilterButton onPress={() => console.log} />
         <Navbar current={routeName} />
@@ -190,4 +156,4 @@ class HomeScreen extends Component {
   }
 }
 
-export default HomeScreen;
+export default QuestionView;
