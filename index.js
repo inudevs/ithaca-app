@@ -12,6 +12,7 @@ import {
   JoinScreen,
   HomeScreen,
   QuestionView,
+  ChatView,
 } from './screens';
 import DefaultHeader from './components/DefaultHeader';
 
@@ -36,6 +37,10 @@ const AppNavigator = createStackNavigator(
     Question: {
       screen: QuestionView,
       navigationOptions: defaultNavigationOptions('질문 보기'),
+    },
+    Chat: {
+      screen: ChatView,
+      // navigationOptions: defaultNavigationOptions(),
     },
   },
   {
