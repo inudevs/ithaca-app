@@ -13,10 +13,10 @@ const win = Dimensions.get('window');
 
 const navList = [
   { route: 'Home', icon: require('../assets/icons/normal/list.png'), selected: require('../assets/icons/selected/list.png') },
-  { route: '', icon: require('../assets/icons/normal/user.png'), selected: require('../assets/icons/selected/list.png') },
-  { route: '', icon: require('../assets/icons/normal/scan.png'), selected: require('../assets/icons/selected/list.png') },
-  { route: '', icon: require('../assets/icons/normal/alarm.png'), selected: require('../assets/icons/selected/list.png') },
-  { route: '', icon: require('../assets/icons/normal/mentor.png'), selected: require('../assets/icons/selected/list.png') },
+  { route: 'User', icon: require('../assets/icons/normal/user.png'), selected: require('../assets/icons/selected/user.png') },
+  { route: 'Scan', icon: require('../assets/icons/normal/scan.png'), selected: require('../assets/icons/selected/scan.png') },
+  { route: 'Alarm', icon: require('../assets/icons/normal/alarm.png'), selected: require('../assets/icons/selected/alarm.png') },
+  { route: 'Mentor', icon: require('../assets/icons/normal/mentor.png'), selected: require('../assets/icons/selected/mentor.png') },
 ];
 
 const styles = StyleSheet.create({
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     width: (win.width / navList.length),
   },
   row: {
-    zIndex: 2,
+    zIndex: 1,
     backgroundColor: 'white',
     justifyContent: 'space-around',
     flexDirection: 'row',

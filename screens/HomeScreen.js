@@ -7,7 +7,6 @@
 
 import React, { Component } from 'react';
 import {
-  Alert,
   Dimensions,
   StyleSheet,
   ScrollView,
@@ -139,7 +138,7 @@ class HomeScreen extends Component {
     super(props);
     this.state = {
       questions: exampleQuestionData,
-      filterShow: true,
+      filterShow: false,
     };
   }
 
