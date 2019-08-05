@@ -44,7 +44,7 @@ const AppNavigator = createStackNavigator(
     },
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Question',
     // transitionConfig: () => ({
     //   transitionSpec: {
     //     duration: 0,

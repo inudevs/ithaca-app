@@ -14,6 +14,7 @@ import {
   View,
   Text,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 
 import API from '../api';
@@ -191,38 +192,42 @@ class HomeScreen extends Component {
         <ScrollView>
           <View style={styles.questions}>
             {questions.map((item, idx) => (
-              <View
-                style={[(idx === questions.length - 1) ? styles.questionLast: styles.question ]}
+              <TouchableOpacity
                 key={idx}
-              >              
-                <Text style={styles.title}>
-                  <Text style={styles.category}>{item.category}</Text>
-                  <Text style={styles.blank}> </Text>
-                  {item.title}
-                </Text>
-                <View style={styles.meta}>
-                  <Text style={styles.name}>{item.user.name}</Text>
-                  <Text style={styles.timestamp}>{moment.unix(item.timestamp).fromNow()}</Text>
-                  <Text style={styles.status}>
-                    {(item.status=='P') ? '진행중' : '완료'}
+                onPress={() => this.props.navigation.navigate('Question')}
+              >
+                <View
+                  style={[(idx === questions.length - 1) ? styles.questionLast: styles.question ]}
+                >              
+                  <Text style={styles.title}>
+                    <Text style={styles.category}>{item.category}</Text>
+                    <Text style={styles.blank}> </Text>
+                    {item.title}
                   </Text>
+                  <View style={styles.meta}>
+                    <Text style={styles.name}>{item.user.name}</Text>
+                    <Text style={styles.timestamp}>{moment.unix(item.timestamp).fromNow()}</Text>
+                    <Text style={styles.status}>
+                      {(item.status=='P') ? '진행중' : '완료'}
+                    </Text>
+                  </View>
+                  <Image
+                    // source={{uri: item.photo}}
+                    source={item.image}
+                    resizeMode="cover"
+                    style={styles.photo}
+                  />
+                  <View style={styles.footer}>
+                    <Text style={styles.requests}>답변 {item.requests}</Text>
+                    <Text style={styles.views}>
+                      <Image
+                        source={require('../assets/icons/eye.png')}
+                        style={styles.eye}
+                      /> {item.views}
+                    </Text>
+                  </View>
                 </View>
-                <Image
-                  // source={{uri: item.photo}}
-                  source={item.image}
-                  resizeMode="cover"
-                  style={styles.photo}
-                />
-                <View style={styles.footer}>
-                  <Text style={styles.requests}>답변 {item.requests}</Text>
-                  <Text style={styles.views}>
-                    <Image
-                      source={require('../assets/icons/eye.png')}
-                      style={styles.eye}
-                    /> {item.views}
-                  </Text>
-                </View>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         </ScrollView>
