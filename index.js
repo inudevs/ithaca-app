@@ -12,20 +12,25 @@ import {
   JoinScreen,
   HomeScreen,
 } from './screens';
+import DefaultHeader from './components/DefaultHeader';
+
+const defaultNavigationOptions = (title) => ({
+  header: props => <DefaultHeader title={title} {...props} />
+})
 
 const AppNavigator = createStackNavigator(
   {
     Login: {
       screen: LoginScreen,
-      navigationOptions: { title: '로그인' },
+      navigationOptions: defaultNavigationOptions('로그인'),
     },
     Join: {
       screen: JoinScreen,
-      navigationOptions: { title: '회원가입' },
+      navigationOptions: defaultNavigationOptions('회원가입'),
     },
     Home: {
       screen: HomeScreen,
-      navigationOptions: { title: '질문 목록' },
+      navigationOptions: defaultNavigationOptions('질문 목록'),
     },
   },
   {
