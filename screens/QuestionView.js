@@ -20,6 +20,7 @@ import API from '../api';
 import moment from '../time.js';
 import Navbar from '../components/Navbar';
 import FlatButton from '../components/FlatButton';
+import ApplyButton from '../components/ApplyButton';
 
 const win = Dimensions.get('window');
 
@@ -142,10 +143,15 @@ const styles = StyleSheet.create({
     color: '#5F5F5F',
     fontSize: 15,
     lineHeight: 15 * 1.4,
-  }
+  },
+  requestApplyWrap: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
 });
 
 const exampleQuestionData = {
+  mine: true, // question의 작성자(멘티)가 현재 사용자의 것인가?
   id: '5d47a1b2db87e70f7aa22ef5',
   user: { name: '테스트' },
   status: 'C',
@@ -262,13 +268,35 @@ class QuestionView extends Component {
                   <Text style={styles.profileName}>
                     { item.user.name }
                   </Text>
+                  {(() => {
+                    if (question.mine) {
+                      return (<Text
+                          style={[styles.profileTimestamp,
+                            { marginLeft: 8 }]}
+                        >
+                        { moment.unix(item.timestamp).fromNow() }
+                      </Text>);
+                    }
+                  })()}
                 </View>
-                <Text style={styles.profileTimestamp}>
-                  { moment.unix(item.timestamp).fromNow() }
-                </Text>
+                <View style={styles.requestApplyWrap}>
+                  {(() => {
+                    if (question.mine) {
+                      return <ApplyButton onPress={() => 1} />;
+                    } else {
+                      return (<Text style={styles.profileTimestamp}>
+                        { moment.unix(item.timestamp).fromNow() }
+                      </Text>);
+                    }
+                  })()}
+                </View>
               </View>
             ))}
-            <FlatButton text="멘토링 지원" onPress={() => 1} />
+            {(() => {
+              if (!question.mine) {
+                return <FlatButton text="멘토링 지원" onPress={() => 1} />;
+              }
+            })()}
           </View>
         </ScrollView>
         <Navbar current={routeName} />
