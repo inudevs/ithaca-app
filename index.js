@@ -11,6 +11,7 @@ import {
   LoginScreen,
   JoinScreen,
   HomeScreen,
+  QuestionView,
 } from './screens';
 import DefaultHeader from './components/DefaultHeader';
 
@@ -32,9 +33,13 @@ const AppNavigator = createStackNavigator(
       screen: HomeScreen,
       navigationOptions: defaultNavigationOptions('질문 목록'),
     },
+    QuesView: {
+      screen: QuestionView,
+      navigationOptions: defaultNavigationOptions('질문 보기'),
+    },
   },
   {
-    initialRouteName: 'Join',
+    initialRouteName: 'QuesView',
     transitionConfig: () => ({
     //   transitionSpec: {
     //     duration: 0,
