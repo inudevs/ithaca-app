@@ -34,14 +34,14 @@ const AppNavigator = createStackNavigator(
     },
   },
   {
-    initialRouteName: 'Join',
-    transitionConfig: () => ({
+    initialRouteName: 'Home',
+    // transitionConfig: () => ({
     //   transitionSpec: {
     //     duration: 0,
     //     timing: Animated.timing,
     //     easing: Easing.step0,
     //   },
-    }),
+    // }),
   }
 );
 

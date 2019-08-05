@@ -20,6 +20,7 @@ import API from '../api';
 import moment from '../time.js';
 import Navbar from '../components/Navbar';
 import FilterButton from '../components/FilterButton';
+import Filter from '../components/Filter';
 
 const win = Dimensions.get('window');
 
@@ -138,6 +139,7 @@ class HomeScreen extends Component {
     super(props);
     this.state = {
       questions: exampleQuestionData,
+      filterShow: true,
     };
   }
 
@@ -183,7 +185,13 @@ class HomeScreen extends Component {
             ))}
           </View>
         </ScrollView>
-        <FilterButton onPress={() => console.log} />
+        {(() => {
+          if (!this.state.filterShow) {
+            return <FilterButton onPress={() => this.setState({ filterShow: true })} />;
+          } else {
+            return <Filter onFilterClose={() => this.setState({ filterShow: false })} />;
+          }
+        })()}
         <Navbar current={routeName} />
       </View>
     );

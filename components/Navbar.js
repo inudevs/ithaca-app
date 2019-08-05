@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
     width: (win.width / navList.length),
   },
   row: {
-    zIndex: 1,
+    zIndex: 2,
     backgroundColor: 'white',
     justifyContent: 'space-around',
     flexDirection: 'row',
