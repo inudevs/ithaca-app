@@ -96,10 +96,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const selected = ['국어', '사회'];
-const others = ['역사', '수학', '과학', '영어', '기타'];
+// const selected = ['국어', '사회'];
+// const others = ['역사', '수학', '과학', '영어', '기타'];
 
-const Filter = ({ onFilterClose }) => (
+const Filter = ({ subjects, onSelectSubject, onFilterClose }) => (
   <View style={styles.container}>
     <TouchableNativeFeedback onPress={onFilterClose}>
       <View style={styles.head}>
@@ -111,28 +111,40 @@ const Filter = ({ onFilterClose }) => (
       </View>
     </TouchableNativeFeedback>
     <View style={styles.selected}>
-      {selected.map((subject, idx) => {
-        return (<View style={styles.category} key={idx}>
-          <Text style={styles.categoryText}>
-            { subject } <Image
-              style={styles.categoryIcon}
-              source={require('../assets/icons/normal/minus.png')}
-            />
-          </Text>
-        </View>);
+      {subjects.filter((subject) => subject.selected)
+        .map((subject, idx) => {
+        return (<TouchableNativeFeedback
+            onPress={() => onSelectSubject(subject.value)}
+            key={idx}
+          >
+          <View style={styles.category}>
+            <Text style={styles.categoryText}>
+              { subject.value } <Image
+                style={styles.categoryIcon}
+                source={require('../assets/icons/normal/minus.png')}
+              />
+            </Text>
+          </View>
+        </TouchableNativeFeedback>);
       })}
     </View>
     <ScrollView style={styles.others}>
       <View style={{ flexWrap: 'wrap', flexDirection:'row', alignItems: 'flex-start'}}>
-        {others.map((subject, idx) => {
-          return (<View style={styles.categoryNormal} key={idx}>
-            <Text style={styles.categoryNormalText}>
-              { subject } <Image
-                style={styles.categoryNormalIcon}
-                source={require('../assets/icons/selected/plus.png')}
-              />
-            </Text>
-          </View>);
+        {subjects.filter((subject) => !subject.selected)
+          .map((subject, idx) => {
+          return (<TouchableNativeFeedback
+              onPress={() => onSelectSubject(subject.value)}
+              key={idx}
+            >
+            <View style={styles.categoryNormal}>
+              <Text style={styles.categoryNormalText}>
+                { subject.value } <Image
+                  style={styles.categoryNormalIcon}
+                  source={require('../assets/icons/selected/plus.png')}
+                />
+              </Text>
+            </View>
+          </TouchableNativeFeedback>);
         })}
       </View>
     </ScrollView>

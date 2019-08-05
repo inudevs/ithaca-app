@@ -138,8 +138,26 @@ class HomeScreen extends Component {
     super(props);
     this.state = {
       questions: exampleQuestionData,
+      subjects: [
+        { value: '국어', selected: false },
+        { value: '영어', selected: false },
+        { value: '수학', selected: false },
+        { value: '사회', selected: false },
+        { value: '과학', selected: false },
+        { value: '역사', selected: false },
+        { value: '기타', selected: false },
+      ],
       filterShow: false,
     };
+    this.onSelectSubject = this.onSelectSubject.bind();
+  }
+
+  onSelectSubject = (subject) => {
+    let { subjects } = this.state;
+    let subjectIdx;
+    subjects.some(function(item, idx) { subjectIdx = idx; return (item.value === subject); });
+    subjects[subjectIdx].selected = !subjects[subjectIdx].selected
+    this.setState({subjects})
   }
 
   render() {
@@ -188,7 +206,11 @@ class HomeScreen extends Component {
           if (!this.state.filterShow) {
             return <FilterButton onPress={() => this.setState({ filterShow: true })} />;
           } else {
-            return <Filter onFilterClose={() => this.setState({ filterShow: false })} />;
+            return (<Filter
+              subjects={this.state.subjects}
+              onSelectSubject={(subject) => this.onSelectSubject(subject)}
+              onFilterClose={() => this.setState({ filterShow: false })}
+            />);
           }
         })()}
         <Navbar current={routeName} />
