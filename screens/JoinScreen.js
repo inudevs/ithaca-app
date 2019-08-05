@@ -16,8 +16,47 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import API from '../api.js';
+import TextboxInput from '../components/TextboxInput';
 
 const win = Dimensions.get('window');
+
+const fields = [
+  { 
+    name: 'email',
+    placeholder: '이메일',
+    autoCompleteType: 'email',
+  },
+  {
+    name: 'password',
+    placeholder: '패스워드',
+    autoCompleteType: 'password',
+  },
+  {
+    name: 'name',
+    placeholder: '이름',
+    autoCompleteType: 'name',
+  }, 
+  {
+    name: 'school',
+    placeholder: '학교',
+    autoCompleteType: 'off',
+  },
+  {
+    name: 'grade',
+    placeholder: '학년',
+    autoCompleteType: 'off',
+  },
+  {
+    name: 'klass', 
+    placeholder: '반',
+    autoCompleteType: 'off',
+  },
+  { 
+    name: 'number',
+    placeholder: '번호',
+    autoCompleteType: 'email',
+  },
+];
 
 const styles = StyleSheet.create({
   container: {
@@ -40,6 +79,7 @@ class JoinScreen extends Component {
       school: '',
       grade: '',
       klass: '',
+      number: '',
       photo: 'https://via.placeholder.com/128',
       email: '',
       password: ''
@@ -54,7 +94,6 @@ class JoinScreen extends Component {
       Alert.alert(
         'Success', JSON.stringify(data)
       );
-      await AsyncStorage.setItem('token', data.token);
     } catch (error) {
       if (error.response.status_code === 400){
         Alert.alert('잘못된 요청');
@@ -67,17 +106,14 @@ class JoinScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        {['name', 'school', 'grade', 'klass', 'email', 'password'].map((key) => { 
-          return <TextInput
-              secureTextEntry={key == 'password'}
-              editable={true}
-              onChangeText={(text) => this.setState({text})}
-              value={this.state.key}
-              autoCompleteType={key}
-              style={styles.textbox}
-              inputProps={{style: { fontSize: 20, }}}
-              placeholder={key}
-            />
+        {fields.map((key, idx) => { 
+          return (<TextboxInput
+              onChangeText={(text) => this.setState({[key.name]: text})}
+              type={key.autoCompleteType}
+              value={this.state[key.name]}
+              placeholder={key.placeholder}
+              key={idx}
+            />)
           }
         )}
         <TouchableOpacity
