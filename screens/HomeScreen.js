@@ -7,6 +7,7 @@
 
 import React, { Component } from 'react';
 import {
+  Alert,
   Dimensions,
   StyleSheet,
   ScrollView,
@@ -20,6 +21,7 @@ import moment from '../time.js';
 import Navbar from '../components/Navbar';
 import FilterButton from '../components/FilterButton';
 import Filter from '../components/Filter';
+import FilterNotFound from '../components/FilterNotFound';
 
 const win = Dimensions.get('window');
 
@@ -103,7 +105,7 @@ const styles = StyleSheet.create({
     color: '#ABABAB',
     fontSize: 15,
     lineHeight: 15 * 1.4,
-  }
+  },
 });
 
 const exampleQuestionData = [
@@ -133,42 +135,64 @@ const exampleQuestionData = [
   },
 ]
 
+const subjects = ['국어', '영어', '수학', '사회', '과학', '역사', '기타'];
+
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       questions: exampleQuestionData,
-      subjects: [
-        { value: '국어', selected: false },
-        { value: '영어', selected: false },
-        { value: '수학', selected: false },
-        { value: '사회', selected: false },
-        { value: '과학', selected: false },
-        { value: '역사', selected: false },
-        { value: '기타', selected: false },
-      ],
+      filters: subjects,
       filterShow: false,
+      filterStart: false,
     };
-    this.onSelectSubject = this.onSelectSubject.bind();
+    this.onPressFilter = this.onPressFilter.bind(this);
+    this.onSelectSubject = this.onSelectSubject.bind(this);
+    this.applyFilter = this.applyFilter.bind(this);
+    this.initFilter = this.initFilter.bind(this);
+  }
+
+  onPressFilter = () => {
+    if (!this.state.filterStart) {
+      this.setState({ filters: [] });
+    }
+    this.setState({ filterShow: true });
   }
 
   onSelectSubject = (subject) => {
-    let { subjects } = this.state;
-    let subjectIdx;
-    subjects.some(function(item, idx) { subjectIdx = idx; return (item.value === subject); });
-    subjects[subjectIdx].selected = !subjects[subjectIdx].selected
-    this.setState({subjects})
+    let { filters } = this.state;
+    if (filters.includes(subject))
+      filters = filters.filter((item) => item != subject)
+    else
+      filters.push(subject);
+    this.setState({ filters, filterStart: true })
+  }
+
+  applyFilter = (questions) => {
+    const { filters } = this.state;
+    return questions.filter((question) => 
+      filters.includes(question.category)
+    );
+  }
+
+  initFilter = () => {
+    this.setState({
+      filterStart: false,
+      filters: [],
+    });
   }
 
   render() {
     const { navigation: { state: { routeName } } } = this.props;
+    const questions = (this.state.filterStart) ? 
+      this.applyFilter(this.state.questions) : this.state.questions;
     return (
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.questions}>
-            {this.state.questions.map((item, idx) => (
+            {questions.map((item, idx) => (
               <View
-                style={[(idx === this.state.questions.length - 1) ? styles.questionLast: styles.question ]}
+                style={[(idx === questions.length - 1) ? styles.questionLast: styles.question ]}
                 key={idx}
               >              
                 <Text style={styles.title}>
@@ -204,15 +228,21 @@ class HomeScreen extends Component {
         </ScrollView>
         {(() => {
           if (!this.state.filterShow) {
-            return <FilterButton onPress={() => this.setState({ filterShow: true })} />;
+            return <FilterButton onPress={this.onPressFilter} />;
           } else {
             return (<Filter
-              subjects={this.state.subjects}
+              subjects={subjects}
+              filters={this.state.filters}
               onSelectSubject={(subject) => this.onSelectSubject(subject)}
               onFilterClose={() => this.setState({ filterShow: false })}
             />);
           }
         })()}
+        {(() => {
+          if (!questions.length) {
+            return (<FilterNotFound onPress={this.initFilter} />)
+          }
+          })()}
         <Navbar current={routeName} />
       </View>
     );
