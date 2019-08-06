@@ -15,6 +15,7 @@ import {
   ChatView,
   User,
   Alarm,
+  Mentor,
 } from './screens';
 import DefaultHeader from './components/DefaultHeader';
 
@@ -51,10 +52,14 @@ const AppNavigator = createStackNavigator(
     Alarm: {
       screen: Alarm,
       navigationOptions: defaultNavigationOptions('알림'),
+    },
+    Mentor: {
+      screen: Mentor,
+      navigationOptions: defaultNavigationOptions('멘토링'),
     }
   },
   {
-    initialRouteName: 'Alarm',
+    initialRouteName: 'Mentor',
     // transitionConfig: () => ({
     //   transitionSpec: {
     //     duration: 0,

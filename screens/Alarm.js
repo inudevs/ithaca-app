@@ -112,42 +112,43 @@ class Alarm extends Component {
     return(
       <View style={styles.container}>
         {alarms.map((item, idx) => {
-          return (<TouchableOpacity key={idx}>
-            <View
-              style={styles.alarm}
-            >
-              <Image
-                source={item.image}
-                resizeMode='cover'
-                style={styles.profileimage}
-              />
-                {(item.context === '지원') ?
-                  <View style={styles.textline}>
-                    <Text style={styles.text}>
-                      <Text style={styles.textbold}>{item.user}</Text>님이 멘토링을 지원했습니다.
-                    </Text>
-                    <Text style={styles.text}>
-                      <Text style={styles.request}>멘토링 > 요청</Text>에서 수락하실 수 있습니다.
-                    </Text>
-                    <Text style={styles.timestamp}>
-                      {moment.unix(item.timestamp).fromNow()}
-                    </Text> 
-                  </View>
-                  :
-                  <View style={styles.textline}>
-                    <Text style={styles.text}>
-                      <Text style={styles.textbold}>{item.user}</Text>님과의 멘토링이 수락되었습니다.
-                    </Text>
-                    <Text style={styles.text}>
-                      <Text style={styles.request}>멘토링 > 내 멘티</Text>를 확인해주세요.
-                    </Text>
-                    <Text style={styles.timestamp}>
-                      {moment.unix(item.timestamp).fromNow()}
-                    </Text>
-                  </View>
-                }
-              </View>
-          </TouchableOpacity>)
+          return (
+            <TouchableOpacity key={idx}>
+              <View
+                style={styles.alarm}
+              >
+                <Image
+                  source={item.image}
+                  resizeMode='cover'
+                  style={styles.profileimage}
+                />
+                  {(item.context === '지원') ?
+                    <View style={styles.textline}>
+                      <Text style={styles.text}>
+                        <Text style={styles.textbold}>{item.user}</Text>님이 멘토링을 지원했습니다.
+                      </Text>
+                      <Text style={styles.text}>
+                        <Text style={styles.request}>멘토링 > 요청</Text>에서 수락하실 수 있습니다.
+                      </Text>
+                      <Text style={styles.timestamp}>
+                        {moment.unix(item.timestamp).fromNow()}
+                      </Text> 
+                    </View>
+                    :
+                    <View style={styles.textline}>
+                      <Text style={styles.text}>
+                        <Text style={styles.textbold}>{item.user}</Text>님과의 멘토링이 수락되었습니다.
+                      </Text>
+                      <Text style={styles.text}>
+                        <Text style={styles.request}>멘토링 > 내 멘티</Text>를 확인해주세요.
+                      </Text>
+                      <Text style={styles.timestamp}>
+                        {moment.unix(item.timestamp).fromNow()}
+                      </Text>
+                    </View>
+                  }
+                </View>
+            </TouchableOpacity>)
         })}
         <Navbar current={routeName} />
       </View>
