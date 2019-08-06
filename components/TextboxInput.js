@@ -11,9 +11,9 @@ const styles = StyleSheet.create({
   textbox: {
     backgroundColor: '#e9ecef',
     height: 50,
-    borderRadius: 25,
     width: (win.width * 0.8),
     paddingHorizontal: 20,
+    alignSelf: 'center',
   }
 });
 
