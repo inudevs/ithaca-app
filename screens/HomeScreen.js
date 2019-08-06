@@ -143,7 +143,7 @@ class HomeScreen extends Component {
     super(props);
     this.state = {
       token: '',
-      questions: exampleQuestionData,
+      questions: [],
       filters: subjects,
       filterShow: false,
       filterStart: false,
@@ -170,7 +170,10 @@ class HomeScreen extends Component {
             Authorization: `Bearer ${token}`,
           },
         })
-        Alert.alert('', JSON.stringify(res.data));
+        this.setState({
+          questions: res.data.questions,
+          token: token,
+        })
       } catch(error) {
         if (error.response.status !== 200) {
           // Mostly 401
@@ -241,8 +244,8 @@ class HomeScreen extends Component {
                     </Text>
                   </View>
                   <Image
-                    // source={{uri: item.photo}}
-                    source={item.image}
+                    source={{uri: item.photo}}
+                    // source={item.image}
                     resizeMode="cover"
                     style={styles.photo}
                   />
@@ -274,7 +277,10 @@ class HomeScreen extends Component {
         })()}
         {(() => {
           if (!questions.length) {
-            return (<FilterNotFound onPress={this.initFilter} />)
+            return (<FilterNotFound
+              onPress={this.initFilter}
+              filterStart={this.state.filterStart}
+            />)
           }
           })()}
         <Navbar current={routeName} />
