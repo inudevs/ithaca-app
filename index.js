@@ -16,6 +16,7 @@ import {
   UserScreen,
   Alarm,
   WriteScreen,
+  Mentor,
 } from './screens';
 import DefaultHeader from './components/DefaultHeader';
 
@@ -56,6 +57,10 @@ const AppNavigator = createStackNavigator(
     Write: {
       screen: WriteScreen,
       navigationOptions: defaultNavigationOptions('질문 등록'),
+    },
+    Mentor: {
+      screen: Mentor,
+      navigationOptions: defaultNavigationOptions('멘토링'),
     }
   },
   {
