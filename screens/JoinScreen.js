@@ -14,6 +14,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
 import Autocomplete from 'react-native-autocomplete-input';
 
@@ -54,29 +55,24 @@ const fields = [
       autoCompleteType: 'off',
     },
   ],
+  [], // 학교는 따로 받음
   [
-    // {
-    //   name: 'school',
-    //   placeholder: '학교',
-    //   autoCompleteType: 'off',
-    // },
-    // {
-    //   name: 'grade',
-    //   placeholder: '학년',
-    //   autoCompleteType: 'off',
-    // },
-    // {
-    //   name: 'klass', 
-    //   placeholder: '반',
-    //   autoCompleteType: 'off',
-    // },
-    // { 
-    //   name: 'number',
-    //   placeholder: '번호',
-    //   autoCompleteType: 'email',
-    // },
+    {
+      name: 'grade',
+      placeholder: '학년',
+      autoCompleteType: 'off',
+    },
+    {
+      name: 'klass', 
+      placeholder: '반',
+      autoCompleteType: 'off',
+    },
+    { 
+      name: 'number',
+      placeholder: '번호',
+      autoCompleteType: 'email',
+    },
   ],
-  [],
 ];
 
 const primaryColor = '#228BE6';
@@ -121,14 +117,45 @@ const styles = StyleSheet.create({
     lineHeight: 18 * 1.4,
     paddingTop: 0,
     paddingBottom: 0,
-  }
+  },
+  completeWrap: {
+    marginTop: (win.height * 0.25),
+    alignItems: 'center',
+  },
+  complete: {
+    fontFamily: 'NotoSansCJKkr-Bold',
+    fontSize: 24,
+    lineHeight: 24 * 1.4,
+    color: 'black',
+  },
+  completeNext: {
+    fontFamily: 'NotoSansCJKkr-Regular',
+    fontSize: 18,
+    lineHeight: 18 * 1.4,
+    color: 'black',
+    marginTop: 10,
+  },
+  toLogin: {
+    backgroundColor: primaryColor,
+    width: (win.width * 0.4),
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 15,
+    marginTop: 50,
+  },
+  toLoginText: {
+    fontFamily: 'NotoSansCJKkr-Regular',
+    fontSize: 18,
+    lineHeight: 18 * 1.4,
+    color: 'white',
+  },
 });
 
 class JoinScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 2, // 회원가입 단계
+      step: 4, // 회원가입 단계
       email: '',
       password: '',
       name: '',
@@ -136,6 +163,7 @@ class JoinScreen extends Component {
       birth: '',
       school: '',
       schoolSelected: false,
+      schoolEnd: false,
       grade: '',
       klass: '',
       number: '',
@@ -169,6 +197,8 @@ class JoinScreen extends Component {
       if (!school || !schoolSelected) {
         return Alert.alert('잠깐!', '올바른 학교 이름인지 확인해 주세요.');
       }
+    } else if (step > 4) {
+      Keyboard.dismiss()
     }
     this.setState((prev) => {
       return { step: prev.step + 1 }
@@ -230,7 +260,10 @@ class JoinScreen extends Component {
             </View>)
           } else if (step === 3) { // 4단계
             return (<View>
-              <Text>{step + 1}/{fields.length}</Text>
+              <View style={styles.stepDesc}>
+                <Text style={styles.stepNum}>{step + 1}/{fields.length}</Text>
+                <Text style={styles.stepHelp}>학교 정보를 입력해주세요.</Text>
+              </View>
               {fields[step].map((key, idx) => { 
                 return (<TextboxInput
                     onChangeText={(text) => this.setState({[key.name]: text})}
@@ -240,19 +273,32 @@ class JoinScreen extends Component {
                     key={idx}
                   />)
                 }
-              )}             
+              )}
             </View>)
-          } else if (step === 4) { // 5단계
-            return (<View>
-              <Text>가입 신청이 완료되었습니다.</Text>
+          } else if (step === fields.length) { // 5단계
+            return (<View style={styles.completeWrap}>
+              <Text style={styles.complete}>가입 신청이 완료되었습니다.</Text>
+              <Text style={styles.completeNext}>아래 버튼을 눌러, 로그인을 진행해주세요.</Text>
+              <TouchableOpacity
+                style={styles.toLogin}
+                onPress={() => this.props.navigation.navigate('Login')}
+              >
+                <Text style={styles.toLoginText}>
+                  로그인 화면으로
+                </Text>
+              </TouchableOpacity>
             </View>)
           }
         })()}
-        <FlatButton
-          text="다음으로"
-          onPress={() => this.onPressNext(step)}
-          style={styles.nextButton}
-        />
+        {(() => {
+          if (step < fields.length) {
+            return <FlatButton
+              text="다음으로"
+              onPress={() => this.onPressNext(step)}
+              style={styles.nextButton}
+            />;
+          }
+        })()}
       </View>
     );
   }
