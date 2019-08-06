@@ -190,37 +190,40 @@ const styles = StyleSheet.create({
 })
 
 const exampleProfile = {
-  image: require('../assets/examples/profile.png'),
+  image: require('../assets/examples/juno.jpg'),
   name: '여준호',
   school: '한국디지털미디어고등학교',
-  question: [
-    {
-      image: require('../assets/examples/math.png'),
-      title: '이 문제의 풀이과정을 잘 모르겠습니다.',
-      views: 30,
-      answers: 3,
-      state: 'M',
-      timestamp: 1564975538,
-    },
-    {
-      image: require('../assets/examples/english.png'),
-      title: '이게 무슨문제죠...?',
-      views: 10,
-      answers: 1,
-      state: 'C',
-      timestamp: 1564550000,
-    },
-  ],
 }
 
 class MyPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // profile: exampleProfile,
-      // questions: exampleProfile.question,
-      mentorings: {},
-      loaded: false,
+      // mentorings: {},
+      mentorings: {
+        user: exampleProfile,
+        mentor: [],
+        mentee: [
+          {
+            image: require('../assets/examples/math.png'),
+            title: '이 문제의 풀이과정을 잘 모르겠습니다.',
+            views: 30,
+            answers: 3,
+            state: 'M',
+            timestamp: 1564975538,
+          },
+          {
+            image: require('../assets/examples/english.png'),
+            title: '이게 무슨문제죠...?',
+            views: 10,
+            answers: 1,
+            state: 'C',
+            timestamp: 1564550000,
+          },
+        ],
+      },
+      // loaded: false,
+      loaded: true,
       token: '',
       user: {},
       tab: 0,
@@ -228,7 +231,8 @@ class MyPage extends Component {
   }
 
   async componentDidMount() {
-    if (!this.state.token) {
+    // if (!this.state.token) {
+    if (false) {
       let token = '';
       try {
         token = await AsyncStorage.getItem('token')
@@ -267,7 +271,8 @@ class MyPage extends Component {
             return (<View style={{marginBottom: 150,}}>
               <View style = {styles.profile}>
               <Image
-                source={{uri: mentorings.user.photo}}
+                // source={{uri: mentorings.user.photo}}
+                source={mentorings.user.image}
                 resizeMode="cover"
                 style={styles.profileimage}
               />
@@ -375,7 +380,8 @@ class MyPage extends Component {
                             </View>
                             <View style={{flex: 1, justifyContent: 'center', margin: 5}}>
                               <Image
-                                source={{uri: item.photo}}
+                                // source={{uri: item.photo}}
+                                source={item.image}
                                 style={styles.quesimage}
                               />
                             </View>
@@ -438,7 +444,8 @@ class MyPage extends Component {
                             </View>
                             <View style={{flex: 1, justifyContent: 'center', margin: 5}}>
                               <Image
-                                source={{uri: item.photo}}
+                                // source={{uri: item.photo}}
+                                source={item.image}
                                 style={styles.quesimage}
                               />
                             </View>

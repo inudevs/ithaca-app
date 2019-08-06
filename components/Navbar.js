@@ -89,7 +89,8 @@ class Navbar extends Component {
       <View style={styles.container}>
         <View style={styles.lines}>
           {navList.map((item, idx) => (
-            <View style={[styles.line, { backgroundColor: (current === item.route) ? '#339AF0': '#E2E2E2' }]} key={idx} />
+            <View style={[styles.line, { backgroundColor: 
+              (current === item.route || (item.route === 'Home' && current === 'Question')) ? '#339AF0': '#E2E2E2' }]} key={idx} />
           ))}
         </View>
         <View style={styles.row}>
@@ -103,7 +104,7 @@ class Navbar extends Component {
                 <Image
                   style={styles.icon}
                   resizeMode="contain"
-                  source={(current === item.route) ? item.selected : item.icon}
+                  source={(current === item.route || (item.route === 'Home' && current === 'Question')) ? item.selected : item.icon}
                 />
               </View>
             </TouchableWithoutFeedback>

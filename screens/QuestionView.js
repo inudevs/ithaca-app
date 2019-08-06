@@ -151,49 +151,50 @@ const styles = StyleSheet.create({
 });
 
 const exampleQuestionData = {
-  mine: true, // question의 작성자(멘티)가 현재 사용자의 것인가?
+  // mine: false, // question의 작성자(멘티)가 현재 사용자의 것인가?
+  mine: true,
   id: '5d47a1b2db87e70f7aa22ef5',
-  user: { name: '테스트' },
-  status: 'C',
-  timestamp: 1564975538,
-  title: '이걸 모르겠어요',
+  user: { name: '여준호' },
+  status: 'P',
+  timestamp: 1565118153,
+  title: '이거 진짜 아무리 봐도 모르겠어요ㅜ',
   article: '도와주세요ㅜㅜ 진짜 알다가도 모르겠습니다',
-  category: '영어',
+  category: '수학',
   photo: 'https://via.placeholder.com/500x300',
   image: require('../assets/examples/english.png'),
   views: 12,
   requests: [
     {
       user: { 
-        name: '송지호',
-        image: require('../assets/examples/profile.png'),
-      }, 
-      approved: false,
-      timestamp: 1564975538
-    },
-    {
-      user: { 
         name: '백은서',
-        image: require('../assets/examples/profile.png'),
+        image: require('../assets/examples/eun.jpeg'),
       }, 
       approved: false,
-      timestamp: 1564975538
+      timestamp: 1565110798
     },
     {
       user: { 
         name: '우상윤',
-        image: require('../assets/examples/profile.png'),
+        image: require('../assets/examples/yoon.jpg'),
       }, 
       approved: true,
-      timestamp: 1564975538
+      timestamp: 1565110898
     },
     {
       user: { 
         name: '천예준',
-        image: require('../assets/examples/profile.png'),
+        image: require('../assets/examples/cute.jpg'),
       }, 
       approved: false,
-      timestamp: 1564975538
+      timestamp: 1565110998
+    },
+    {
+      user: { 
+        name: '송지호',
+        image: require('../assets/examples/song.jpg'),
+      }, 
+      approved: false,
+      timestamp: 1565120078
     },
   ],
 }
@@ -202,9 +203,11 @@ class QuestionView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      question: {},
+      // question: {},
+      question: exampleQuestionData,
       token: '',
-      loaded: false,
+      // loaded: false,
+      loaded: true,
     };
 
     this.onPressApply = this.onPressApply.bind(this);
@@ -212,35 +215,51 @@ class QuestionView extends Component {
   }
 
   async componentDidMount() {
-    if (!this.state.token) {
-      const { navigation } = this.props;
-      const questionID = navigation.getParam('questionID', 'NO-ID');
-      const token = navigation.getParam('token', 'NO-TOKEN');
-      // try {
-      //   token = await AsyncStorage.getItem('token')
-      // } catch(e) {
-      //   this.props.navigation.navigate('Login')       
-      // }
-      // console.warn(token)
-      try {
-        res = await API.get(`/question/${questionID}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        this.setState({
-          question: res.data,
-          token: token,
-          loaded: true,
-        })
-        // console.warn(this.state.question)
-      } catch(error) {
-        // console.warn(JSON.stringify(error.response))
-      }
-    }
+    // if (!this.state.token) {
+    //   const { navigation } = this.props;
+    //   const questionID = navigation.getParam('questionID', 'NO-ID');
+    //   const token = navigation.getParam('token', 'NO-TOKEN');
+    //   // try {
+    //   //   token = await AsyncStorage.getItem('token')
+    //   // } catch(e) {
+    //   //   this.props.navigation.navigate('Login')       
+    //   // }
+    //   // console.warn(token)
+    //   try {
+    //     res = await API.get(`/question/${questionID}`, {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     })
+    //     this.setState({
+    //       question: res.data,
+    //       token: token,
+    //       loaded: true,
+    //     })
+    //     // console.warn(this.state.question)
+    //   } catch(error) {
+    //     // console.warn(JSON.stringify(error.response))
+    //   }
+    // }
   }
 
   async onPressApply () {
+    Alert.alert(
+      '멘토링 신청',
+      '정말 해당 질문에 대해 멘토링을 지원하시겠습니까?',
+      [
+        {
+          text: '아니요',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: '예', onPress: () => {
+          Alert.alert('멘토링 신청', '멘토링 지원이 완료되었습니다.');
+        }},
+      ],
+      {cancelable: false},
+    );
+    return;
     const { question, token } = this.state;
     // console.warn(true)
     try {
@@ -260,6 +279,22 @@ class QuestionView extends Component {
   }
 
   onPressApprove = async requestID => {
+    Alert.alert(
+      '멘토링 승인',
+      '정말 송지호 님의 멘토링을 승인하시겠습니까?',
+      [
+        {
+          text: '아니요',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: '예', onPress: () => {
+          Alert.alert('멘토링 승인', '멘토링 승인이 완료되었습니다.');
+        }},
+      ],
+      {cancelable: false},
+    );
+    return;
     const { question, token } = this.state;
     // console.warn(true)
     try {
@@ -315,8 +350,8 @@ class QuestionView extends Component {
                   </Text>
                 </View>
                 <Image
-                  source={{uri: question.photo}}
-                  // source={question.image}
+                  // source={{uri: question.photo}}
+                  source={question.image}
                   resizeMode="cover"
                   style={styles.photo}
                 />
@@ -336,8 +371,8 @@ class QuestionView extends Component {
                   >
                     <View style={styles.profileInfo}>
                       <Image
-                        source={{uri: item.user.photo}}
-                        // source={item.user.image}
+                        // source={{uri: item.user.photo}}
+                        source={item.user.image}
                         resizeMode="cover"
                         style={styles.profile}
                       />

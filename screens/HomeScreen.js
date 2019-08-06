@@ -112,9 +112,9 @@ const styles = StyleSheet.create({
 const exampleQuestionData = [
   {
     id: '5d47a1b2db87e70f7aa22ef5',
-    user: { name: '테스트' },
+    user: { name: '우상윤' },
     status: 'C',
-    timestamp: 1564975538,
+    timestamp: 1565119233,
     title: '이걸 모르겠어요',
     category: '영어',
     photo: 'https://via.placeholder.com/500x300',
@@ -124,10 +124,22 @@ const exampleQuestionData = [
   },
   {
     id: '5d47a1b2db87e70f7aa22ef5',
-    user: { name: '테스트' },
+    user: { name: '천예준' },
     status: 'C',
-    timestamp: 1564550000,
+    timestamp: 1565118253,
     title: '이 문제의 풀이과정을 자세히 알려주실 분을 구합니다.',
+    category: '수학',
+    photo: 'https://via.placeholder.com/500x300',
+    image: require('../assets/examples/math.png'),
+    views: 12,
+    requests: 4,
+  },
+  {
+    id: '5d47a1b2db87e70f7aa22ef5',
+    user: { name: '여준호' },
+    status: 'P',
+    timestamp: 1565118153,
+    title: '이거 진짜 아무리 봐도 모르겠어요ㅜ',
     category: '수학',
     photo: 'https://via.placeholder.com/500x300',
     image: require('../assets/examples/math.png'),
@@ -144,6 +156,7 @@ class HomeScreen extends Component {
     this.state = {
       token: '',
       questions: [],
+      questions: exampleQuestionData,
       filters: subjects,
       filterShow: false,
       filterStart: false,
@@ -155,34 +168,34 @@ class HomeScreen extends Component {
   }
 
   async componentDidMount () {
-    if (!this.state.token) {
-      let token = '';
-      try {
-        token = await AsyncStorage.getItem('token')
-      } catch(e) {
-        Alert.alert('토큰 없음ㅋㅋ', JSON.stringify(e));
-        // await AsyncStorage.removeItem('token')
-        this.props.navigation.navigate('Login')
-      }
-      try {
-        res = await API.get('/question/', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        this.setState({
-          questions: res.data.questions,
-          token: token,
-        })
-      } catch(error) {
-        if (error.response.status !== 200) {
-          // Mostly 401
-          // 토큰 만료됨
-          await AsyncStorage.removeItem('token')
-          this.props.navigation.navigate('Login')
-        }
-      }
-    }
+    // if (!this.state.token) {
+    //   let token = '';
+    //   try {
+    //     token = await AsyncStorage.getItem('token')
+    //   } catch(e) {
+    //     Alert.alert('토큰 없음ㅋㅋ', JSON.stringify(e));
+    //     // await AsyncStorage.removeItem('token')
+    //     this.props.navigation.navigate('Login')
+    //   }
+    //   try {
+    //     res = await API.get('/question/', {
+    //       headers: {
+    //         Authorization: `Bearer ${token}`,
+    //       },
+    //     })
+    //     this.setState({
+    //       questions: res.data.questions,
+    //       token: token,
+    //     })
+    //   } catch(error) {
+    //     if (error.response.status !== 200) {
+    //       // Mostly 401
+    //       // 토큰 만료됨
+    //       await AsyncStorage.removeItem('token')
+    //       this.props.navigation.navigate('Login')
+    //     }
+    //   }
+    // }
   }
 
   onPressFilter = () => {
@@ -247,8 +260,8 @@ class HomeScreen extends Component {
                     </Text>
                   </View>
                   <Image
-                    source={{uri: item.photo}}
-                    // source={item.image}
+                    // source={{uri: item.photo}}
+                    source={item.image}
                     resizeMode="cover"
                     style={styles.photo}
                   />
