@@ -7,18 +7,18 @@
 
 import React, { Component } from 'react';
 import {
-  Dimensions,
   Alert,
+  Dimensions,
   StyleSheet,
   View,
   Text,
   TouchableOpacity,
-  Button
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+
 import API from '../api.js';
 import TextboxInput from '../components/TextboxInput';
-import Link from '../components/Link';
-import symbolicateStackTrace from 'react-native/Libraries/Core/Devtools/symbolicateStackTrace';
+import FlatButton from '../components/FlatButton';
 
 const win = Dimensions.get('window');
 
@@ -30,46 +30,29 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   content: {
-    height: (win.width*0.2),
-    alignItems: 'center',
-    justifyContent: 'center',
+    marginTop: 22,
   },
-  font: {
-    fontFamily: "NotoSansCJKkr",
-    // fontWeight: "300",
-    // fontStyle: "normal",
-    // lineHeight: 6.3,
-    // letterSpacing: 0,
-    // textAlign: "left",
-    color: highlightColor,
+  help: {
+    fontFamily: 'NotoSansCJKkr-Regular',
+    fontSize: 20,
+    lineHeight: 20 * 1.4,
+    marginBottom: 22,
+    color: primaryColor,
     alignSelf: 'center',
   },
-  font2: {
-    fontFamily: "NotoSansCJKkr",
-    // fontWeight: "300",
-    // fontStyle: "normal",
-    // lineHeight: 6.3,
-    // letterSpacing: 0,
-    // textAlign: "left",
-    color: 'white',
-    alignSelf: 'center',
+  submit: {
+    position: 'absolute',
+    bottom: 0,
   },
-  placeholder: {
-    fontFamily: "NotoSansCJKkr",
-    fontSize: 5,
-    fontWeight: "300",
-    fontStyle: "normal",
-    lineHeight: 7.3,
-    letterSpacing: 0,
-    textAlign: "left",
-    color: "#afafaf"
+  toJoin: {
+    alignSelf: 'flex-start',
+    marginLeft: 20,
   },
-  login: {
-    width: win.width,
-    height: 50,
-    backgroundColor: highlightColor,
-    paddingHorizontal: 20,
-    alignSelf: 'flex-end',
+  toJoinFont: {
+    fontFamily: 'NotoSansCJKkr-Bold',
+    fontSize: 18,
+    lineHeight: 18 * 1.4,
+    color: primaryColor,
   },
 });
 
@@ -83,69 +66,62 @@ class LoginScreen extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
-  async onSubmit (event) {
-    event.preventDefault();
+  async onSubmit () {
     const { email, password } = this.state;
+    if (!email || !password) {
+      Alert.alert('로그인 실패!', '이메일과 패스워드 모두 입력해 주세요.');
+      return;
+    }
     try {
       const { data } = await API.post('/auth/login', { email, password });
-      Alert.alert(
-        'Success', JSON.stringify(data)
-      );
+      Alert.alert('로그인 성공', JSON.stringify(data));
       await AsyncStorage.setItem('token', data.token);
       // 토큰을 저장
-      this.props.navigation.navigate('home');
-      // 홈으로
     } catch (error) {
-      Alert.alert(
-        '로그인 실패', JSON.stringify(error.response.data)
-      );
+      // Alert.alert('로그인 실패', JSON.stringify(error.response.data));
+      Alert.alert('로그인 실패', '이메일과 비밀번호를 확인해 주세요.');
+      return;
     };
+    this.props.navigation.navigate('Home');
+    // 홈으로
   };
 
   render() {
     return (
       <View style={styles.container}>
         <View style={styles.content}>
+          <Text style={styles.help}>
+            이타카 계정에 로그인하세요.
+          </Text>
           <TextboxInput
             value={this.state.email}
-            type={'email'}
+            type="email"
             onChangeText={(email) => this.setState({email})}
-            placeholder="ID"
+            placeholder="이메일"
           />
-        </View>
-        <View style={styles.content}>
           <TextboxInput
             value={this.state.password}
-            type={'password'}
+            type="password"
             onChangeText={(password) => this.setState({password})}
-            placeholder="PW"
+            placeholder="패스워드"
           />
         </View>
         <TouchableOpacity
+          style={styles.toJoin}
           onPress={() => this.props.navigation.navigate('Join')}
-          style={styles.content}
         >
-          <Text style = {styles.font}>
-            회원가입
+          <Text style = {styles.toJoinFont}>
+            계정이 없나요? 회원가입
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        <FlatButton
+          text="로그인"
           onPress={this.onSubmit}
-          style={styles.login}
-        >
-          <Text style={styles.font2}>로그인</Text>
-        </TouchableOpacity>
+          style={styles.submit}
+        />
       </View>
     );
   }
 }
 
 export default LoginScreen;
-
-/*<TouchableOpacity
-          onPress={this.onSubmit}
-          style={styles.login}
-        >
-          <Text style={styles.font}>로그인</Text>
-        </TouchableOpacity>
-*/

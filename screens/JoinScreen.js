@@ -185,7 +185,7 @@ class JoinScreen extends Component {
       // } else {
       //   Alert.alert('에러')
       // }
-      Alert.alert('로그인 실패!', '로그인 중 에러가 발생했습니다.');
+      Alert.alert('회원가입 실패!', '가입 중 에러가 발생했습니다.');
       return false;
     };
   };
