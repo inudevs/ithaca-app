@@ -15,6 +15,7 @@ import {
   ChatView,
   UserScreen,
   Alarm,
+  WriteScreen,
 } from './screens';
 import DefaultHeader from './components/DefaultHeader';
 
@@ -51,10 +52,14 @@ const AppNavigator = createStackNavigator(
     Alarm: {
       screen: Alarm,
       navigationOptions: defaultNavigationOptions('알림'),
+    },
+    Write: {
+      screen: WriteScreen,
+      navigationOptions: defaultNavigationOptions('질문 등록'),
     }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Write',
     // transitionConfig: () => ({
     //   transitionSpec: {
     //     duration: 0,

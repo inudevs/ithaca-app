@@ -5,3 +5,4 @@ export { default as QuestionView } from './QuestionView';
 export { default as ChatView } from './ChatView';
 export { default as UserScreen } from './UserScreen';
 export { default as Alarm } from './Alarm';
+export { default as WriteScreen } from './WriteScreen';
