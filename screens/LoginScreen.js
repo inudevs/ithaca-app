@@ -27,15 +27,32 @@ const primaryColor = '#228BE6';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    alignItems: 'center',
   },
-  join: {
+  content: {
+    height: (win.width*0.2),
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  font: {
     fontFamily: "NotoSansCJKkr",
-    fontWeight: "300",
-    fontStyle: "normal",
-    lineHeight: 6.3,
-    letterSpacing: 0,
-    textAlign: "left",
-    color: '#339AF0',
+    // fontWeight: "300",
+    // fontStyle: "normal",
+    // lineHeight: 6.3,
+    // letterSpacing: 0,
+    // textAlign: "left",
+    color: highlightColor,
+    alignSelf: 'center',
+  },
+  font2: {
+    fontFamily: "NotoSansCJKkr",
+    // fontWeight: "300",
+    // fontStyle: "normal",
+    // lineHeight: 6.3,
+    // letterSpacing: 0,
+    // textAlign: "left",
+    color: 'white',
+    alignSelf: 'center',
   },
   placeholder: {
     fontFamily: "NotoSansCJKkr",
@@ -50,14 +67,10 @@ const styles = StyleSheet.create({
   login: {
     width: win.width,
     height: 50,
-    color: highlightColor,
+    backgroundColor: highlightColor,
     paddingHorizontal: 20,
-    alignSelf: 'center',
+    alignSelf: 'flex-end',
   },
-  join: {
-    color: highlightColor,
-    alignSelf: 'center',
-  }
 });
 
 class LoginScreen extends Component {
@@ -92,28 +105,36 @@ class LoginScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Link
-          style={styles.join}
-          routeName="Join"
-          text="회원가입"
-        />
-        <TextboxInput
-          value={this.state.email}
-          type={'email'}
-          onChangeText={(email) => this.setState({email})}
-          placeholder="ID"
-        />
-        <TextboxInput
-          value={this.state.password}
-          type={'password'}
-          onChangeText={(password) => this.setState({password})}
-          placeholder="PW"
-        />
-        <Button 
-          style={styles.login}
-          title='로그인'
+        <View style={styles.content}>
+          <TextboxInput
+            value={this.state.email}
+            type={'email'}
+            onChangeText={(email) => this.setState({email})}
+            placeholder="ID"
+          />
+        </View>
+        <View style={styles.content}>
+          <TextboxInput
+            value={this.state.password}
+            type={'password'}
+            onChangeText={(password) => this.setState({password})}
+            placeholder="PW"
+          />
+        </View>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('Join')}
+          style={styles.content}
+        >
+          <Text style = {styles.font}>
+            회원가입
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={this.onSubmit}
-        />
+          style={styles.login}
+        >
+          <Text style={styles.font2}>로그인</Text>
+        </TouchableOpacity>
       </View>
     );
   }
