@@ -28,17 +28,21 @@ const styles = StyleSheet.create({
   },
 });
 
-const FilterNotFound = ({ onPress }) => (
+const FilterNotFound = ({ onPress, filterStart }) => (
   <TouchableOpacity
     style={styles.notFound}
     onPress={onPress}
   >
     <Text style={styles.notFoundText}>
-      검색 결과가 없습니다.
+      {(filterStart) ? '검색 결과가 없습니다.' : '데이터 로딩 중...'}
     </Text>
-    <Text style={styles.removeFilter}>
-      필터 초기화
-    </Text>
+    {(() => {
+      if (filterStart) {
+        return (<Text style={styles.removeFilter}>
+          필터 초기화
+        </Text>);
+      }
+    })()}
   </TouchableOpacity>
 );
 

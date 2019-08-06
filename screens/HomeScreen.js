@@ -16,7 +16,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import API from '../api';
 import moment from '../time.js';
 import Navbar from '../components/Navbar';
@@ -142,7 +142,8 @@ class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      questions: exampleQuestionData,
+      token: '',
+      questions: [],
       filters: subjects,
       filterShow: false,
       filterStart: false,
@@ -151,6 +152,37 @@ class HomeScreen extends Component {
     this.onSelectSubject = this.onSelectSubject.bind(this);
     this.applyFilter = this.applyFilter.bind(this);
     this.initFilter = this.initFilter.bind(this);
+  }
+
+  async componentDidMount () {
+    if (!this.state.token) {
+      let token = '';
+      try {
+        token = await AsyncStorage.getItem('token')
+      } catch(e) {
+        Alert.alert('토큰 없음ㅋㅋ', JSON.stringify(e));
+        // await AsyncStorage.removeItem('token')
+        this.props.navigation.navigate('Login')
+      }
+      try {
+        res = await API.get('/question/', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        this.setState({
+          questions: res.data.questions,
+          token: token,
+        })
+      } catch(error) {
+        if (error.response.status !== 200) {
+          // Mostly 401
+          // 토큰 만료됨
+          await AsyncStorage.removeItem('token')
+          this.props.navigation.navigate('Login')
+        }
+      }
+    }
   }
 
   onPressFilter = () => {
@@ -194,7 +226,10 @@ class HomeScreen extends Component {
             {questions.map((item, idx) => (
               <TouchableOpacity
                 key={idx}
-                onPress={() => this.props.navigation.navigate('Question')}
+                onPress={() => this.props.navigation.navigate('Question', {
+                  questionID: item.id,
+                  token: this.state.token,
+                })}
               >
                 <View
                   style={[(idx === questions.length - 1) ? styles.questionLast: styles.question ]}
@@ -212,8 +247,8 @@ class HomeScreen extends Component {
                     </Text>
                   </View>
                   <Image
-                    // source={{uri: item.photo}}
-                    source={item.image}
+                    source={{uri: item.photo}}
+                    // source={item.image}
                     resizeMode="cover"
                     style={styles.photo}
                   />
@@ -245,7 +280,10 @@ class HomeScreen extends Component {
         })()}
         {(() => {
           if (!questions.length) {
-            return (<FilterNotFound onPress={this.initFilter} />)
+            return (<FilterNotFound
+              onPress={this.initFilter}
+              filterStart={this.state.filterStart}
+            />)
           }
           })()}
         <Navbar current={routeName} />

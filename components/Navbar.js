@@ -23,7 +23,8 @@ const navList = [
     selected: require('../assets/icons/selected/user.png')
   },
   {
-    route: 'Scan',
+    // route: 'Scan',
+    route: 'Write',
     icon: require('../assets/icons/normal/scan.png'),
     selected: require('../assets/icons/selected/scan.png')
   },

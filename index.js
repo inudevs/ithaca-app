@@ -13,8 +13,9 @@ import {
   HomeScreen,
   QuestionView,
   ChatView,
-  User,
+  UserScreen,
   Alarm,
+  WriteScreen,
   Mentor,
 } from './screens';
 import DefaultHeader from './components/DefaultHeader';
@@ -46,12 +47,16 @@ const AppNavigator = createStackNavigator(
       // navigationOptions: defaultNavigationOptions(),
     },
     User: {
-      screen: User,
+      screen: UserScreen,
       navigationOptions: defaultNavigationOptions('내 정보'),
     },
     Alarm: {
       screen: Alarm,
       navigationOptions: defaultNavigationOptions('알림'),
+    },
+    Write: {
+      screen: WriteScreen,
+      navigationOptions: defaultNavigationOptions('질문 등록'),
     },
     Mentor: {
       screen: Mentor,

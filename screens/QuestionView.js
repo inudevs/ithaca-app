@@ -202,103 +202,181 @@ class QuestionView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      question: exampleQuestionData,
+      question: {},
+      token: '',
+      loaded: false,
     };
+
+    this.onPressApply = this.onPressApply.bind(this);
+    this.onPressApprove = this.onPressApprove.bind(this);
+  }
+
+  async componentDidMount() {
+    if (!this.state.token) {
+      const { navigation } = this.props;
+      const questionID = navigation.getParam('questionID', 'NO-ID');
+      const token = navigation.getParam('token', 'NO-TOKEN');
+      // try {
+      //   token = await AsyncStorage.getItem('token')
+      // } catch(e) {
+      //   this.props.navigation.navigate('Login')       
+      // }
+      // console.warn(token)
+      try {
+        res = await API.get(`/question/${questionID}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        this.setState({
+          question: res.data,
+          token: token,
+          loaded: true,
+        })
+        // console.warn(this.state.question)
+      } catch(error) {
+        // console.warn(JSON.stringify(error.response))
+      }
+    }
+  }
+
+  async onPressApply () {
+    const { question, token } = this.state;
+    // console.warn(true)
+    try {
+      const { status } = await API.post(`/mentor/request/${question.id}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      // console.warn(status)
+      if (status === 200) {
+        Alert.alert('멘토링 신청', "멘토링 지원이 완료되었습니다.");
+      }
+    } catch (error) {
+      // please no
+      console.warn(error.response.status)
+    }
+  }
+
+  onPressApprove = async requestID => {
+    const { question, token } = this.state;
+    // console.warn(true)
+    try {
+      const { status } = await API.post(`/mentor/approve/${question.id}`, {
+        request_id: requestID,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      // console.warn(status)
+      if (status === 200) {
+        Alert.alert('멘토링 신청', "멘토링 신청이 완료되었습니다.\n'멘토링' 메뉴에서 확인하실 수 있습니다.");
+      }
+    } catch (error) {
+      // please no
+      console.warn(error.response.status)
+    }
   }
 
   render() {
     const { navigation: { state: { routeName } } } = this.props;
-    const { question } = this.state;
+    const { question, loaded } = this.state;
     return (
       <View style={styles.container}>
-        <ScrollView>
-          <View style={styles.question}>
-            <Text style={styles.title}>
-              <Text style={styles.category}>
-                {question.category}
-              </Text>
-              <Text style={styles.blank}> </Text>
-              {question.title}
-              <Text style={styles.blank}> </Text>
-              <Text style={styles.views}>
-                <Image
-                  source={require('../assets/icons/eye.png')}
-                  style={styles.eye}
-                /> {question.views}
-              </Text>
-            </Text>
-            <View style={styles.meta}>
-              <Text style={styles.name}>
-                {question.user.name}
-              </Text>
-              <Text style={styles.timestamp}>
-                {moment.unix(question.timestamp).format('YY.DD.MM')}
-              </Text>
-              <Text style={styles.status}>
-                {(question.status=='P') ? '진행중' : '완료'}
-              </Text>
-            </View>
-            <Image
-              // source={{uri: question.photo}}
-              source={question.image}
-              resizeMode="cover"
-              style={styles.photo}
-            />
-            <Text style={styles.article}>
-              {question.article}
-            </Text>
-            <View style={styles.footer}>
-              <Text style={styles.requestNum}>답변 {question.requests.length}</Text>
-            </View>
-          </View>
-          <View style={styles.requests}>
-            {question.requests.map((item, idx) => (
-              <View
-                style={[styles.request, (idx === question.requests.length - 1) ? 
-                  {} : styles.requestNotLast]}
-                key={idx}
-              >
-                <View style={styles.profileInfo}>
-                  <Image
-                    // source={{uri: item.user.image}}
-                    source={item.user.image}
-                    resizeMode="cover"
-                    style={styles.profile}
-                  />
-                  <Text style={styles.profileName}>
-                    { item.user.name }
+        {(() => {
+          if (loaded) {
+            return (<ScrollView>
+              <View style={styles.question}>
+                <Text style={styles.title}>
+                  <Text style={styles.category}>
+                    {question.category}
                   </Text>
-                  {(() => {
-                    if (question.mine) {
-                      return (<Text
-                          style={[styles.profileTimestamp,
-                            { marginLeft: 8 }]}
-                        >
-                        { moment.unix(item.timestamp).fromNow() }
-                      </Text>);
-                    }
-                  })()}
+                  <Text style={styles.blank}> </Text>
+                  {question.title}
+                  <Text style={styles.blank}> </Text>
+                  <Text style={styles.views}>
+                    <Image
+                      source={require('../assets/icons/eye.png')}
+                      style={styles.eye}
+                    /> {question.views}
+                  </Text>
+                </Text>
+                <View style={styles.meta}>
+                  <Text style={styles.name}>
+                    {question.user.name}
+                  </Text>
+                  <Text style={styles.timestamp}>
+                    {moment.unix(question.timestamp).format('YY.DD.MM')}
+                  </Text>
+                  <Text style={styles.status}>
+                    {(question.status=='P') ? '진행중' : '완료'}
+                  </Text>
                 </View>
-                <View style={styles.requestApplyWrap}>
-                  {(() => {
-                    if (question.mine) {
-                      return <ApplyButton onPress={() => 1} />;
-                    } else {
-                      return (<Text style={styles.profileTimestamp}>
-                        { moment.unix(item.timestamp).fromNow() }
-                      </Text>);
-                    }
-                  })()}
+                <Image
+                  source={{uri: question.photo}}
+                  // source={question.image}
+                  resizeMode="cover"
+                  style={styles.photo}
+                />
+                <Text style={styles.article}>
+                  {question.article}
+                </Text>
+                <View style={styles.footer}>
+                  <Text style={styles.requestNum}>답변 {question.requests.length}</Text>
                 </View>
               </View>
-            ))}
-            {(() => {
-              if (!question.mine) {
-                return <FlatButton text="멘토링 지원" onPress={() => 1} />;
-              }
-            })()}
-          </View>
-        </ScrollView>
+              <View style={styles.requests}>
+                {question.requests.map((item, idx) => (
+                  <View
+                    style={[styles.request, (idx === question.requests.length - 1) ? 
+                      {} : styles.requestNotLast]}
+                    key={idx}
+                  >
+                    <View style={styles.profileInfo}>
+                      <Image
+                        source={{uri: item.user.photo}}
+                        // source={item.user.image}
+                        resizeMode="cover"
+                        style={styles.profile}
+                      />
+                      <Text style={styles.profileName}>
+                        { item.user.name }
+                      </Text>
+                      {(() => {
+                        if (question.mine) {
+                          return (<Text
+                              style={[styles.profileTimestamp,
+                                { marginLeft: 8 }]}
+                            >
+                            { moment.unix(item.timestamp).fromNow() }
+                          </Text>);
+                        }
+                      })()}
+                    </View>
+                    <View style={styles.requestApplyWrap}>
+                      {(() => {
+                        if (question.mine) {
+                          return <ApplyButton onPress={() => this.onPressApprove(item.id)} />;
+                        } else {
+                          return (<Text style={styles.profileTimestamp}>
+                            { moment.unix(item.timestamp).fromNow() }
+                          </Text>);
+                        }
+                      })()}
+                    </View>
+                  </View>
+                ))}
+                {(() => {
+                  if (!question.mine) {
+                    return <FlatButton text="멘토링 지원" onPress={this.onPressApply} />;
+                  }
+                })()}
+              </View>
+            </ScrollView>);
+          }
+        })()}
         <Navbar current={routeName} />
       </View>
     );
