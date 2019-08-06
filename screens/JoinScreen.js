@@ -16,7 +16,6 @@ import {
   TouchableOpacity,
   Keyboard,
 } from 'react-native';
-import Autocomplete from 'react-native-autocomplete-input';
 
 import API from '../api.js';
 import TextboxInput from '../components/TextboxInput';
