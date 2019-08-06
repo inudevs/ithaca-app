@@ -96,10 +96,7 @@ const styles = StyleSheet.create({
   },
 });
 
-// const selected = ['국어', '사회'];
-// const others = ['역사', '수학', '과학', '영어', '기타'];
-
-const Filter = ({ subjects, onSelectSubject, onFilterClose }) => (
+const Filter = ({ subjects, filters, onSelectSubject, onFilterClose }) => (
   <View style={styles.container}>
     <TouchableNativeFeedback onPress={onFilterClose}>
       <View style={styles.head}>
@@ -111,15 +108,14 @@ const Filter = ({ subjects, onSelectSubject, onFilterClose }) => (
       </View>
     </TouchableNativeFeedback>
     <View style={styles.selected}>
-      {subjects.filter((subject) => subject.selected)
-        .map((subject, idx) => {
+      {filters.map((subject, idx) => {
         return (<TouchableNativeFeedback
-            onPress={() => onSelectSubject(subject.value)}
+            onPress={() => onSelectSubject(subject)}
             key={idx}
           >
           <View style={styles.category}>
             <Text style={styles.categoryText}>
-              { subject.value } <Image
+              { subject } <Image
                 style={styles.categoryIcon}
                 source={require('../assets/icons/normal/minus.png')}
               />
@@ -130,15 +126,15 @@ const Filter = ({ subjects, onSelectSubject, onFilterClose }) => (
     </View>
     <ScrollView style={styles.others}>
       <View style={{ flexWrap: 'wrap', flexDirection:'row', alignItems: 'flex-start'}}>
-        {subjects.filter((subject) => !subject.selected)
+        {subjects.filter((subject) => !filters.includes(subject))
           .map((subject, idx) => {
           return (<TouchableNativeFeedback
-              onPress={() => onSelectSubject(subject.value)}
+              onPress={() => onSelectSubject(subject)}
               key={idx}
             >
             <View style={styles.categoryNormal}>
               <Text style={styles.categoryNormalText}>
-                { subject.value } <Image
+                { subject } <Image
                   style={styles.categoryNormalIcon}
                   source={require('../assets/icons/selected/plus.png')}
                 />
