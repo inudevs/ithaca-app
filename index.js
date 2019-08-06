@@ -8,6 +8,7 @@ import { createAppContainer, createStackNavigator } from 'react-navigation';
 
 import { name as appName } from './app.json';
 import {
+  Splash,
   LoginScreen,
   JoinScreen,
   HomeScreen,
@@ -26,6 +27,9 @@ const defaultNavigationOptions = (title) => ({
 
 const AppNavigator = createStackNavigator(
   {
+    Splash: {
+      screen: Splash
+    },
     Login: {
       screen: LoginScreen,
       navigationOptions: defaultNavigationOptions('로그인'),
@@ -64,7 +68,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'Splash',
     // transitionConfig: () => ({
     //   transitionSpec: {
     //     duration: 0,
