@@ -15,8 +15,11 @@ import {
   TextInput,
   TouchableOpacity,
 } from 'react-native';
+import Autocomplete from 'react-native-autocomplete-input';
+
 import API from '../api.js';
 import TextboxInput from '../components/TextboxInput';
+import SchoolSearch from '../components/SchoolSearch';
 import FlatButton from '../components/FlatButton';
 
 const win = Dimensions.get('window');
@@ -103,6 +106,21 @@ const styles = StyleSheet.create({
   nextButton: {
     position: 'absolute',
     bottom: 0,
+  },
+  textbox: {
+    backgroundColor: '#e9ecef',
+    height: 55,
+    width: (win.width * 0.9),
+    paddingHorizontal: 20,
+    alignSelf: 'center',
+    marginBottom: 10,
+  },
+  input: {
+    fontFamily: 'NotoSansCJKkr-Regular',
+    fontSize: 18,
+    lineHeight: 18 * 1.4,
+    paddingTop: 0,
+    paddingBottom: 0,
   }
 });
 
@@ -110,7 +128,7 @@ class JoinScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 0, // 회원가입 단계
+      step: 2, // 회원가입 단계
       email: '',
       password: '',
       name: '',
@@ -194,20 +212,10 @@ class JoinScreen extends Component {
                 <Text style={styles.stepNum}>{step + 1}/{fields.length}</Text>
                 <Text style={styles.stepHelp}>학교를 선택해주세요.</Text>
               </View>
-              {/* {fields[step].map((key, idx) => { 
-                return (<TextboxInput
-                    onChangeText={(text) => this.setState({[key.name]: text})}
-                    type={key.autoCompleteType}
-                    value={this.state[key.name]}
-                    placeholder={key.placeholder}
-                    key={idx}
-                  />)
-                }
-              )} */}
-              <TextboxInput
-                onChangeText={(text) => this.setState({school: text})}
-                type="off"
+              <SchoolSearch
+                data={["한국게임과학고등학교","한국경마축산고등학교","한국경진학교","한국과학영재학교","한국관광고등학교"]}
                 value={this.state.school}
+                onChangeText={(school) => this.setState({ school })}
                 placeholder="학교 이름을 검색하세요"
               />
             </View>)

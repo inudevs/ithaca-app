@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
     width: (win.width * 0.9),
     paddingHorizontal: 20,
     alignSelf: 'center',
-    marginBottom: 10,
   },
   input: {
     fontFamily: 'NotoSansCJKkr-Regular',
@@ -25,14 +24,15 @@ const styles = StyleSheet.create({
   }
 });
 
-const TextboxInput = ({ value, type, onChangeText, placeholder }) => (
+const TextboxInput = ({ value, type, onChangeText, placeholder, noMargin }) => (
   <TextInput
     secureTextEntry={(type === 'password')}
     editable={true}
     onChangeText={onChangeText}
     value={value}
     autoCompleteType={type}
-    style={[styles.textbox, styles.input]}
+    style={[styles.textbox, styles.input, 
+      {marginBottom: (noMargin) ? 0 : 10}]}
     inputProps={styles.input}
     placeholder={placeholder}
   />
