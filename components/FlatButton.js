@@ -10,7 +10,6 @@ import {
 
 const win = Dimensions.get('window');
 const highlightColor = '#339AF0';
-const primaryColor = '#228BE6';
 const styles = StyleSheet.create({
   button: {
     // position: 'absolute',
@@ -31,9 +30,9 @@ const styles = StyleSheet.create({
   }
 });
 
-const FlatButton = ({ onPress, text }) => (
+const FlatButton = ({ onPress, text, style }) => (
   <TouchableOpacity
-    style={styles.button}
+    style={[styles.button, style]}
     onPress={onPress}
   >
     <Text style={styles.text}>
