@@ -25,7 +25,7 @@ class Splash extends Component {
         <Image
           source={require('../assets/logo.png')}
           resizeMode="contain"
-          style={{ width: win.width * 0.8, alignSelf: 'center', marginTop: 30, }}
+          style={{ width: win.width * 0.8, alignSelf: 'center', marginTop: win.height * 0.13 }}
         />
       </View>
     </TouchableWithoutFeedback>);
