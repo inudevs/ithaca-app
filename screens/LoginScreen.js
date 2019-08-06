@@ -66,6 +66,19 @@ class LoginScreen extends Component {
     this.onSubmit = this.onSubmit.bind(this);
   }
 
+  async componentDidMount () {
+    // 토큰 체크
+    try {
+      const value = await AsyncStorage.getItem('token')
+      if(value !== null) {
+        this.props.navigation.navigate('Home')
+        // 토큰이 있음 -> 홈으로 가라
+      }
+    } catch(e) {
+      // 토큰이 없음
+    }
+  }
+
   async onSubmit () {
     const { email, password } = this.state;
     if (!email || !password) {
