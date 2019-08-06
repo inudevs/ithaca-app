@@ -10,16 +10,20 @@ import {
   Alert,
   Dimensions,
   StyleSheet,
+  ScrollView,
   View,
   Text,
   TextInput,
   TouchableOpacity,
   Keyboard,
   Picker,
+  Image,
 } from 'react-native';
 
 import API from '../api.js';
 import AsyncStorage from '@react-native-community/async-storage';
+import ImagePicker from 'react-native-image-picker'
+
 import TextboxInput from '../components/TextboxInput';
 import TextareaInput from '../components/TextareaInput';
 import SchoolSearch from '../components/SchoolSearch';
@@ -51,6 +55,39 @@ const styles = StyleSheet.create({
     fontSize: 17,
     lineHeight: 17 * 1.4,
     color: primaryColor,
+  },
+  choosePhoto: {
+    backgroundColor: primaryColor,
+    width: (win.width * 0.4),
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    paddingVertical: 10,
+    marginBottom: 10,
+  },
+  choosePhotoText: {
+    color: '#fff',
+    fontFamily: 'NotoSansCJKkr-Regular',
+    fontSize: 18,
+    lineHeight: 18 * 1.4,
+  },
+  noPic: {
+    color: '#000',
+    fontFamily: 'NotoSansCJKkr-Bold',
+    fontSize: 20,
+    lineHeight: 20 * 1.4,
+    alignSelf: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  photo: {
+    width: 300,
+    height: 300,
+    borderColor: '#AAA',
+    borderWidth: 1,
+    alignSelf: 'center',
+    marginTop: 20,
+    marginBottom: 10,
   }
 });
 
@@ -60,21 +97,54 @@ class WriteScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      language: ''
+      category: '수학',
+      photo: null,
+      title: ' 이거 진짜 아무리 봐도 모르겠어요ㅜ',
+      article: '역함수에 대한 개념이 부족합니다! 잘 설명해 주실 수 있는 분이 계실까요?',
     }
 
     this.onSubmit = this.onSubmit.bind(this);
+    this.handleChoosePhoto = this.handleChoosePhoto.bind(this);
   }r
 
   async onSubmit () {
+    Alert.alert('질문 등록', '질문을 등록했습니다!')
+    this.props.navigation.navigate('Home')
   };
 
+  handleChoosePhoto = () => {
+    const options = {
+      noData: true,
+    }
+    ImagePicker.launchImageLibrary(options, response => {
+      if (response.uri) {
+        this.setState({ photo: response })
+      }
+    })
+  }
+
   render() {
+    const { photo } = this.state;
     return (
-      <View style={styles.container}>
-        {/* <TextboxInput
-          placeholder="카테고리"
-        /> */}
+      <ScrollView style={[styles.container]}>
+        <View>
+          {(() => {
+            if (photo) {
+              return <Image
+                source={{ uri: photo.uri }}
+                style={styles.photo}
+              />;
+            } else {
+              return <Text style={styles.noPic}>사진 없음</Text>;
+            }
+          })()}
+          <TouchableOpacity
+            onPress={this.handleChoosePhoto}
+            style={styles.choosePhoto}
+          >
+            <Text style={styles.choosePhotoText}>사진 업로드</Text>
+          </TouchableOpacity>
+        </View>        
         <View style={{justifyContent:'center', alignItems:'center'}}>
           <Text style={styles.helpTop}>
             {'아래는 인공지능 모델이 예측한 카테고리입니다.'}
@@ -84,10 +154,10 @@ class WriteScreen extends Component {
           </Text>
         </View>
         <Picker
-          selectedValue={this.state.language}
+          selectedValue={this.state.category}
           style={styles.picker}
           onValueChange={(itemValue, itemIndex) =>
-            this.setState({language: itemValue})
+            this.setState({category: itemValue})
           }>
           {subjects.map((item, idx) => {
             return <Picker.Item label={item} value={item} key={idx} />;
@@ -95,11 +165,19 @@ class WriteScreen extends Component {
         </Picker>
         <TextboxInput
           placeholder="제목"
+          value={this.state.title}
+          onChangeText={(title) => this.setState({ title })}
         />
         <TextareaInput
           placeholder="내용"
+          value={this.state.article}
+          onChangeText={(article) => this.setState({ article })}
         />
-      </View>
+        <FlatButton
+          text="확인"
+          onPress={() => this.onSubmit()}
+        />
+      </ScrollView>
     );
   }
 }

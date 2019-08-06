@@ -59,7 +59,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Write',
+    initialRouteName: 'Home',
     // transitionConfig: () => ({
     //   transitionSpec: {
     //     duration: 0,

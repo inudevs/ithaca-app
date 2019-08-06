@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
     width: (win.width * 0.9),
     paddingHorizontal: 20,
     alignSelf: 'center',
+    marginBottom: 25,
   },
   input: {
     fontFamily: 'NotoSansCJKkr-Regular',
