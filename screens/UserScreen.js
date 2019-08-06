@@ -333,6 +333,10 @@ class MyPage extends Component {
                       return mentorings.mentor.map((item, idx) => (
                         <TouchableOpacity 
                           key={idx}
+                          onPress={() => this.props.navigation.navigate('Question', {
+                            questionID: item.id,
+                            token: this.state.token,
+                          })}
                         >
                           <View
                             style={[(idx === mentorings.mentor.length - 1) ? styles.questionLast: styles.question ]}
@@ -392,6 +396,10 @@ class MyPage extends Component {
                       return mentorings.mentee.map((item, idx) => (
                         <TouchableOpacity 
                           key={idx}
+                          onPress={() => this.props.navigation.navigate('Question', {
+                            questionID: item.id,
+                            token: this.state.token,
+                          })}
                         >
                           <View
                             style={[(idx === mentorings.mentee.length - 1) ? styles.questionLast: styles.question ]}
