@@ -7,7 +7,6 @@
 
 import React, { Component } from 'react';
 import {
-  Alert,
   Dimensions,
   StyleSheet,
   ScrollView,
@@ -15,7 +14,6 @@ import {
   Text,
   Image,
   TouchableOpacity,
-  Button
 } from 'react-native';
 import Navbar from '../components/Navbar';
 import moment from '../time.js';
@@ -23,7 +21,6 @@ import moment from '../time.js';
 const win = Dimensions.get('window');
 
 const highlightColor = '#339AF0';
-const primaryColor = '#228BE6';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -230,9 +227,7 @@ class MyPage extends Component {
         <ScrollView>
           <View>
             {questions.map((item, idx) => (
-              <TouchableOpacity 
-                key={idx}
-              >
+              <TouchableOpacity key={idx}>
                 <View
                   style={[(idx === questions.length - 1) ? styles.questionLast: styles.question ]}
                 >

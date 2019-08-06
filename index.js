@@ -14,6 +14,7 @@ import {
   QuestionView,
   ChatView,
   User,
+  Alarm,
 } from './screens';
 import DefaultHeader from './components/DefaultHeader';
 
@@ -46,10 +47,14 @@ const AppNavigator = createStackNavigator(
     User: {
       screen: User,
       navigationOptions: defaultNavigationOptions('내 정보'),
+    },
+    Alarm: {
+      screen: Alarm,
+      navigationOptions: defaultNavigationOptions('알림'),
     }
   },
   {
-    initialRouteName: 'Join',
+    initialRouteName: 'Alarm',
     // transitionConfig: () => ({
     //   transitionSpec: {
     //     duration: 0,
