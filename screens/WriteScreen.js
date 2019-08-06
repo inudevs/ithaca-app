@@ -88,6 +88,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 20,
     marginBottom: 10,
+  },
+  button: {
+    position: 'absolute',
+    bottom: 0,
   }
 });
 
@@ -126,7 +130,7 @@ class WriteScreen extends Component {
   render() {
     const { photo } = this.state;
     return (
-      <ScrollView style={[styles.container]}>
+      <ScrollView style={[styles.container]} contentContainerStyle={{minHeight:(win.height*0.92)}}>
         <View>
           {(() => {
             if (photo) {
@@ -176,6 +180,7 @@ class WriteScreen extends Component {
         <FlatButton
           text="확인"
           onPress={() => this.onSubmit()}
+          style={styles.button}
         />
       </ScrollView>
     );
