@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: (win.width * 0.8),
     paddingHorizontal: 20,
-    alignSelf: 'center',
+    alignSelf: 'center'
   }
 });
 
