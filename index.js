@@ -12,6 +12,7 @@ import {
   JoinScreen,
   HomeScreen,
   QuestionView,
+  ChatView,
 } from './screens';
 import DefaultHeader from './components/DefaultHeader';
 
@@ -33,20 +34,24 @@ const AppNavigator = createStackNavigator(
       screen: HomeScreen,
       navigationOptions: defaultNavigationOptions('질문 목록'),
     },
-    QuesView: {
+    Question: {
       screen: QuestionView,
       navigationOptions: defaultNavigationOptions('질문 보기'),
     },
+    Chat: {
+      screen: ChatView,
+      // navigationOptions: defaultNavigationOptions(),
+    },
   },
   {
-    initialRouteName: 'QuesView',
-    transitionConfig: () => ({
+    initialRouteName: 'Login',
+    // transitionConfig: () => ({
     //   transitionSpec: {
     //     duration: 0,
     //     timing: Animated.timing,
     //     easing: Easing.step0,
     //   },
-    }),
+    // }),
   }
 );
 

@@ -14,12 +14,15 @@ import {
   View,
   Text,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 
 import API from '../api';
 import moment from '../time.js';
 import Navbar from '../components/Navbar';
 import FilterButton from '../components/FilterButton';
+import Filter from '../components/Filter';
+import FilterNotFound from '../components/FilterNotFound';
 
 const win = Dimensions.get('window');
 
@@ -103,7 +106,7 @@ const styles = StyleSheet.create({
     color: '#ABABAB',
     fontSize: 15,
     lineHeight: 15 * 1.4,
-  }
+  },
 });
 
 const exampleQuestionData = [
@@ -133,57 +136,118 @@ const exampleQuestionData = [
   },
 ]
 
+const subjects = ['국어', '영어', '수학', '사회', '과학', '역사', '기타'];
+
 class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       questions: exampleQuestionData,
+      filters: subjects,
+      filterShow: false,
+      filterStart: false,
     };
+    this.onPressFilter = this.onPressFilter.bind(this);
+    this.onSelectSubject = this.onSelectSubject.bind(this);
+    this.applyFilter = this.applyFilter.bind(this);
+    this.initFilter = this.initFilter.bind(this);
+  }
+
+  onPressFilter = () => {
+    if (!this.state.filterStart) {
+      this.setState({ filters: [] });
+    }
+    this.setState({ filterShow: true });
+  }
+
+  onSelectSubject = (subject) => {
+    let { filters } = this.state;
+    if (filters.includes(subject))
+      filters = filters.filter((item) => item != subject)
+    else
+      filters.push(subject);
+    this.setState({ filters, filterStart: true })
+  }
+
+  applyFilter = (questions) => {
+    const { filters } = this.state;
+    return questions.filter((question) => 
+      filters.includes(question.category)
+    );
+  }
+
+  initFilter = () => {
+    this.setState({
+      filterStart: false,
+      filters: [],
+    });
   }
 
   render() {
     const { navigation: { state: { routeName } } } = this.props;
+    const questions = (this.state.filterStart) ? 
+      this.applyFilter(this.state.questions) : this.state.questions;
     return (
       <View style={styles.container}>
         <ScrollView>
           <View style={styles.questions}>
-            {this.state.questions.map((item, idx) => (
-              <View
-                style={[(idx === this.state.questions.length - 1) ? styles.questionLast: styles.question ]}
+            {questions.map((item, idx) => (
+              <TouchableOpacity
                 key={idx}
-              >              
-                <Text style={styles.title}>
-                  <Text style={styles.category}>{item.category}</Text>
-                  <Text style={styles.blank}> </Text>
-                  {item.title}
-                </Text>
-                <View style={styles.meta}>
-                  <Text style={styles.name}>{item.user.name}</Text>
-                  <Text style={styles.timestamp}>{moment.unix(item.timestamp).fromNow()}</Text>
-                  <Text style={styles.status}>
-                    {(item.status=='P') ? '진행중' : '완료'}
+                onPress={() => this.props.navigation.navigate('Question')}
+              >
+                <View
+                  style={[(idx === questions.length - 1) ? styles.questionLast: styles.question ]}
+                >              
+                  <Text style={styles.title}>
+                    <Text style={styles.category}>{item.category}</Text>
+                    <Text style={styles.blank}> </Text>
+                    {item.title}
                   </Text>
+                  <View style={styles.meta}>
+                    <Text style={styles.name}>{item.user.name}</Text>
+                    <Text style={styles.timestamp}>{moment.unix(item.timestamp).fromNow()}</Text>
+                    <Text style={styles.status}>
+                      {(item.status=='P') ? '진행중' : '완료'}
+                    </Text>
+                  </View>
+                  <Image
+                    // source={{uri: item.photo}}
+                    source={item.image}
+                    resizeMode="cover"
+                    style={styles.photo}
+                  />
+                  <View style={styles.footer}>
+                    <Text style={styles.requests}>답변 {item.requests}</Text>
+                    <Text style={styles.views}>
+                      <Image
+                        source={require('../assets/icons/eye.png')}
+                        style={styles.eye}
+                      /> {item.views}
+                    </Text>
+                  </View>
                 </View>
-                <Image
-                  // source={{uri: item.photo}}
-                  source={item.image}
-                  resizeMode="cover"
-                  style={styles.photo}
-                />
-                <View style={styles.footer}>
-                  <Text style={styles.requests}>답변 {item.requests}</Text>
-                  <Text style={styles.views}>
-                    <Image
-                      source={require('../assets/icons/eye.png')}
-                      style={styles.eye}
-                    /> {item.views}
-                  </Text>
-                </View>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         </ScrollView>
-        <FilterButton onPress={() => console.log} />
+        {(() => {
+          if (!this.state.filterShow) {
+            return <FilterButton onPress={this.onPressFilter} />;
+          } else {
+            return (<Filter
+              subjects={subjects}
+              filters={this.state.filters}
+              onSelectSubject={(subject) => this.onSelectSubject(subject)}
+              onFilterClose={() => this.setState({ filterShow: false })}
+            />);
+          }
+        })()}
+        {(() => {
+          if (!questions.length) {
+            return (<FilterNotFound onPress={this.initFilter} />)
+          }
+          })()}
         <Navbar current={routeName} />
       </View>
     );
