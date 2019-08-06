@@ -206,6 +206,9 @@ class QuestionView extends Component {
       token: '',
       loaded: false,
     };
+
+    this.onPressApply = this.onPressApply.bind(this);
+    this.onPressApprove = this.onPressApprove.bind(this);
   }
 
   async componentDidMount() {
@@ -230,11 +233,41 @@ class QuestionView extends Component {
           token: token,
           loaded: true,
         })
-        console.warn(this.state.question)
+        // console.warn(this.state.question)
       } catch(error) {
-        console.warn(JSON.stringify(error.response))
+        // console.warn(JSON.stringify(error.response))
       }
     }
+  }
+
+  async onPressApply () {
+    const { question, token } = this.state;
+    // console.warn(true)
+    try {
+      const { status } = await API.post(`/mentor/request/${question.id}`, {}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      // console.warn(status)
+      if (status === 200) {
+        Alert.alert('멘토링 신청', "멘토링 지원이 완료되었습니다.\n'멘토링' 메뉴에서 확인하실 수 있습니다.");
+      }
+    } catch (error) {
+      // please no
+      console.warn(error.response.status)
+    }
+  }
+
+  async onPressApprove (requestID) {
+    const { question, token } = this.state;
+    await API.post(`/mentor/approve/${question.id}`, {
+      request_id: requestID,
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
   }
 
   render() {
@@ -315,7 +348,7 @@ class QuestionView extends Component {
                     <View style={styles.requestApplyWrap}>
                       {(() => {
                         if (question.mine) {
-                          return <ApplyButton onPress={() => 1} />;
+                          return <ApplyButton onPress={this.onPressApprove(item.id)} />;
                         } else {
                           return (<Text style={styles.profileTimestamp}>
                             { moment.unix(item.timestamp).fromNow() }
@@ -327,7 +360,7 @@ class QuestionView extends Component {
                 ))}
                 {(() => {
                   if (!question.mine) {
-                    return <FlatButton text="멘토링 지원" onPress={() => 1} />;
+                    return <FlatButton text="멘토링 지원" onPress={this.onPressApply} />;
                   }
                 })()}
               </View>
