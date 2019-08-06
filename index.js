@@ -13,6 +13,7 @@ import {
   HomeScreen,
   QuestionView,
   ChatView,
+  User,
 } from './screens';
 import DefaultHeader from './components/DefaultHeader';
 
@@ -42,9 +43,13 @@ const AppNavigator = createStackNavigator(
       screen: ChatView,
       // navigationOptions: defaultNavigationOptions(),
     },
+    User: {
+      screen: User,
+      navigationOptions: defaultNavigationOptions('내 정보'),
+    }
   },
   {
-    initialRouteName: 'Login',
+    initialRouteName: 'User',
     // transitionConfig: () => ({
     //   transitionSpec: {
     //     duration: 0,
