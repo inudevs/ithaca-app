@@ -87,7 +87,7 @@ class LoginScreen extends Component {
     }
     try {
       const { data } = await API.post('/auth/login', { email, password });
-      Alert.alert('로그인 성공', JSON.stringify(data));
+      // Alert.alert('로그인 성공', JSON.stringify(data));
       await AsyncStorage.setItem('token', data.token);
       // 토큰을 저장
     } catch (error) {

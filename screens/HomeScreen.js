@@ -226,7 +226,10 @@ class HomeScreen extends Component {
             {questions.map((item, idx) => (
               <TouchableOpacity
                 key={idx}
-                onPress={() => this.props.navigation.navigate('Question')}
+                onPress={() => this.props.navigation.navigate('Question', {
+                  questionID: item.id,
+                  token: this.state.token,
+                })}
               >
                 <View
                   style={[(idx === questions.length - 1) ? styles.questionLast: styles.question ]}
