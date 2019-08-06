@@ -155,7 +155,7 @@ class JoinScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      step: 4, // 회원가입 단계
+      step: 0, // 회원가입 단계 (0부터)
       email: '',
       password: '',
       name: '',
@@ -173,31 +173,34 @@ class JoinScreen extends Component {
     this.onPressNext = this.onPressNext.bind(this);
   }
 
-  async onSubmit (event) {
-    // event.preventDefault();
-    // const { name, school, grade, klass, photo, email, password } = this.state;
-    // try {
-    //   const { data } = await API.post('/auth/join', { name, school, grade, klass, photo, email, password });
-    //   Alert.alert(
-    //     'Success', JSON.stringify(data)
-    //   );
-    // } catch (error) {
-    //   if (error.response.status_code === 400){
-    //     Alert.alert('잘못된 요청');
-    //   } else {
-    //     Alert.alert('에러')
-    //   }
-    // };
+  async onSubmit () {
+    const { email, password, name, phone, birth, school, grade, klass, number, photo } = this.state;
+    const payload = { email, password, name, phone, birth, school, grade, klass, number, photo };
+    try {
+      // const { data } = await API.post('/auth/join', payload);
+      await API.post('/auth/join', payload);
+      return true;
+    } catch (error) {
+      // if (error.response.status_code === 400){
+      //   Alert.alert('잘못된 요청');
+      // } else {
+      //   Alert.alert('에러')
+      // }
+      Alert.alert('로그인 실패!', '로그인 중 에러가 발생했습니다.');
+      return false;
+    };
   };
 
-  onPressNext = () => {
+  async onPressNext () {
     const { step } = this.state;
     if (step === 2) {
       const { school, schoolSelected } = this.state;
       if (!school || !schoolSelected) {
         return Alert.alert('잠깐!', '올바른 학교 이름인지 확인해 주세요.');
       }
-    } else if (step > 4) {
+    } else if (step === 3) { // 여기서 제출!
+      const res = await this.onSubmit()
+      if (!res) return; // 성공 못하면 보류
       Keyboard.dismiss()
     }
     this.setState((prev) => {
