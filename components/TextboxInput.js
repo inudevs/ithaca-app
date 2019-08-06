@@ -10,22 +10,30 @@ const win = Dimensions.get('window');
 const styles = StyleSheet.create({
   textbox: {
     backgroundColor: '#e9ecef',
-    height: 50,
-    width: (win.width * 0.8),
+    height: 55,
+    width: (win.width * 0.9),
     paddingHorizontal: 20,
-    alignSelf: 'center'
+    alignSelf: 'center',
+  },
+  input: {
+    fontFamily: 'NotoSansCJKkr-Regular',
+    fontSize: 18,
+    lineHeight: 18 * 1.4,
+    paddingTop: 0,
+    paddingBottom: 0,
   }
 });
 
-const TextboxInput = ({ value, type, onChangeText, placeholder }) => (
+const TextboxInput = ({ value, type, onChangeText, placeholder, noMargin }) => (
   <TextInput
     secureTextEntry={(type === 'password')}
     editable={true}
     onChangeText={onChangeText}
     value={value}
     autoCompleteType={type}
-    style={styles.textbox}
-    inputProps={{style: { fontSize: 20, }}}
+    style={[styles.textbox, styles.input, 
+      {marginBottom: (noMargin) ? 0 : 10}]}
+    inputProps={styles.input}
     placeholder={placeholder}
   />
 );
