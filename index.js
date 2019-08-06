@@ -14,6 +14,7 @@ import {
   QuestionView,
   ChatView,
   UserScreen,
+  Alarm,
 } from './screens';
 import DefaultHeader from './components/DefaultHeader';
 
@@ -46,6 +47,10 @@ const AppNavigator = createStackNavigator(
     User: {
       screen: UserScreen,
       navigationOptions: defaultNavigationOptions('내 정보'),
+    },
+    Alarm: {
+      screen: Alarm,
+      navigationOptions: defaultNavigationOptions('알림'),
     }
   },
   {
