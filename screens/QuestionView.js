@@ -251,7 +251,7 @@ class QuestionView extends Component {
       })
       // console.warn(status)
       if (status === 200) {
-        Alert.alert('멘토링 신청', "멘토링 지원이 완료되었습니다.\n'멘토링' 메뉴에서 확인하실 수 있습니다.");
+        Alert.alert('멘토링 신청', "멘토링 지원이 완료되었습니다.");
       }
     } catch (error) {
       // please no
@@ -259,15 +259,25 @@ class QuestionView extends Component {
     }
   }
 
-  async onPressApprove (requestID) {
+  onPressApprove = async requestID => {
     const { question, token } = this.state;
-    await API.post(`/mentor/approve/${question.id}`, {
-      request_id: requestID,
-    }, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    // console.warn(true)
+    try {
+      const { status } = await API.post(`/mentor/approve/${question.id}`, {
+        request_id: requestID,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      // console.warn(status)
+      if (status === 200) {
+        Alert.alert('멘토링 신청', "멘토링 신청이 완료되었습니다.\n'멘토링' 메뉴에서 확인하실 수 있습니다.");
+      }
+    } catch (error) {
+      // please no
+      console.warn(error.response.status)
+    }
   }
 
   render() {
@@ -348,7 +358,7 @@ class QuestionView extends Component {
                     <View style={styles.requestApplyWrap}>
                       {(() => {
                         if (question.mine) {
-                          return <ApplyButton onPress={this.onPressApprove(item.id)} />;
+                          return <ApplyButton onPress={() => this.onPressApprove(item.id)} />;
                         } else {
                           return (<Text style={styles.profileTimestamp}>
                             { moment.unix(item.timestamp).fromNow() }
