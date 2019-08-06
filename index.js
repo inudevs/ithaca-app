@@ -49,7 +49,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'User',
+    initialRouteName: 'Join',
     // transitionConfig: () => ({
     //   transitionSpec: {
     //     duration: 0,
