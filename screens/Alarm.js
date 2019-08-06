@@ -13,6 +13,7 @@ import {
   Text,
   Image,
   TouchableOpacity,
+  Linking,
 } from 'react-native';
 import moment from '../time.js';
 import Navbar from '../components/Navbar';
@@ -111,6 +112,31 @@ class Alarm extends Component {
     const { alarms } = this.state;
     return(
       <View style={styles.container}>
+        <TouchableOpacity
+        onPress={() => {
+          Linking.openURL('http://ithaca.ml/uploads/pdf/5d46c0ce5b443488743a908f.pdf').catch((err) => {
+            console.log(err)
+          });
+        }}
+        >
+              <View
+                style={styles.alarm}
+              >
+                <Image
+                  source={require('../assets/examples/song.jpg')}
+                  resizeMode='cover'
+                  style={styles.profileimage}
+                />
+                    <View style={styles.textline}>
+                      <Text style={styles.text}>
+                        최근 종료된 <Text style={styles.textbold}>송지호</Text>님과의 멘토링 포트폴리오가 생성됬습니다.
+                      </Text>
+                      <Text style={styles.timestamp}>
+                        {moment.unix(1565127112).fromNow()}
+                      </Text> 
+                    </View>
+                </View>
+            </TouchableOpacity>
         {alarms.map((item, idx) => {
           return (
             <TouchableOpacity key={idx}>

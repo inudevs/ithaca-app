@@ -103,8 +103,8 @@ class WriteScreen extends Component {
     this.state = {
       category: '수학',
       photo: null,
-      title: '이 문제 모르겠어요....',
-      article: '어떻게 접근해야 할지 모르겠어요ㅜㅠ',
+      title: '',
+      article: '',
     }
 
     this.onSubmit = this.onSubmit.bind(this);
