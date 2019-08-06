@@ -91,7 +91,6 @@ class LoginScreen extends Component {
       await AsyncStorage.setItem('token', data.token);
       // 토큰을 저장
     } catch (error) {
-      // Alert.alert('로그인 실패', JSON.stringify(error.response.data));
       Alert.alert('로그인 실패', '이메일과 비밀번호를 확인해 주세요.');
       return;
     };

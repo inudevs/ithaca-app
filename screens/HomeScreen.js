@@ -162,7 +162,7 @@ class HomeScreen extends Component {
       } catch(e) {
         Alert.alert('토큰 없음ㅋㅋ', JSON.stringify(e));
         // await AsyncStorage.removeItem('token')
-        this.props.navigation.navigate('Login')       
+        this.props.navigation.navigate('Login')
       }
       try {
         res = await API.get('/question/', {

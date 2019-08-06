@@ -13,7 +13,7 @@ import {
   HomeScreen,
   QuestionView,
   ChatView,
-  User,
+  UserScreen,
 } from './screens';
 import DefaultHeader from './components/DefaultHeader';
 
@@ -44,7 +44,7 @@ const AppNavigator = createStackNavigator(
       // navigationOptions: defaultNavigationOptions(),
     },
     User: {
-      screen: User,
+      screen: UserScreen,
       navigationOptions: defaultNavigationOptions('내 정보'),
     }
   },
