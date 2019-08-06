@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   join: {
     color: highlightColor,
     alignSelf: 'center',
-  }
+  },
 });
 
 class LoginScreen extends Component {
@@ -92,11 +92,6 @@ class LoginScreen extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Link
-          style={styles.join}
-          routeName="Join"
-          text="회원가입"
-        />
         <TextboxInput
           value={this.state.email}
           type={'email'}
@@ -109,6 +104,17 @@ class LoginScreen extends Component {
           onChangeText={(password) => this.setState({password})}
           placeholder="PW"
         />
+        {/* <Link
+          routeName="Join"
+          text="회원가입"
+        /> */}
+        <TouchableOpacity
+          onPress={() => this.props.navigation.navigate('Join')}
+        >
+          <Text style = {styles.join}>
+            회원가입
+          </Text>
+        </TouchableOpacity>
         <Button 
           style={styles.login}
           title='로그인'

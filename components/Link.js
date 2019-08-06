@@ -6,14 +6,17 @@ import {
 } from 'react-native';
 import { withNavigation } from 'react-navigation';
 
+const highlightColor = '#339AF0';
+const primaryColor = '#228BE6';
 const styles = StyleSheet.create({
+  
 });
 
 const Link = ({ navigation, routeName, text }) => (
   <TouchableOpacity
     onPress={() => navigation.navigate(routeName)}
   >
-    <Text>
+    <Text style = {styles.join}>
       { text }
     </Text>
   </TouchableOpacity>
