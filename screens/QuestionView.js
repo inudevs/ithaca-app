@@ -203,11 +203,11 @@ class QuestionView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // question: {},
-      question: exampleQuestionData,
+      question: {},
+      // question: exampleQuestionData,
       token: '',
-      // loaded: false,
-      loaded: true,
+      loaded: false,
+      // loaded: true,
     };
 
     this.onPressApply = this.onPressApply.bind(this);
@@ -215,51 +215,51 @@ class QuestionView extends Component {
   }
 
   async componentDidMount() {
-    // if (!this.state.token) {
-    //   const { navigation } = this.props;
-    //   const questionID = navigation.getParam('questionID', 'NO-ID');
-    //   const token = navigation.getParam('token', 'NO-TOKEN');
-    //   // try {
-    //   //   token = await AsyncStorage.getItem('token')
-    //   // } catch(e) {
-    //   //   this.props.navigation.navigate('Login')       
-    //   // }
-    //   // console.warn(token)
-    //   try {
-    //     res = await API.get(`/question/${questionID}`, {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     })
-    //     this.setState({
-    //       question: res.data,
-    //       token: token,
-    //       loaded: true,
-    //     })
-    //     // console.warn(this.state.question)
-    //   } catch(error) {
-    //     // console.warn(JSON.stringify(error.response))
-    //   }
-    // }
+    if (!this.state.token) {
+      const { navigation } = this.props;
+      const questionID = navigation.getParam('questionID', 'NO-ID');
+      const token = navigation.getParam('token', 'NO-TOKEN');
+      // try {
+      //   token = await AsyncStorage.getItem('token')
+      // } catch(e) {
+      //   this.props.navigation.navigate('Login')       
+      // }
+      // console.warn(token)
+      try {
+        res = await API.get(`/question/${questionID}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        this.setState({
+          question: res.data,
+          token: token,
+          loaded: true,
+        })
+        // console.warn(this.state.question)
+      } catch(error) {
+        // console.warn(JSON.stringify(error.response))
+      }
+    }
   }
 
   async onPressApply () {
-    Alert.alert(
-      '멘토링 신청',
-      '정말 해당 질문에 대해 멘토링을 지원하시겠습니까?',
-      [
-        {
-          text: '아니요',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {text: '예', onPress: () => {
-          Alert.alert('멘토링 신청', '멘토링 지원이 완료되었습니다.');
-        }},
-      ],
-      {cancelable: false},
-    );
-    return;
+    // Alert.alert(
+    //   '멘토링 신청',
+    //   '정말 해당 질문에 대해 멘토링을 지원하시겠습니까?',
+    //   [
+    //     {
+    //       text: '아니요',
+    //       onPress: () => console.log('Cancel Pressed'),
+    //       style: 'cancel',
+    //     },
+    //     {text: '예', onPress: () => {
+    //       Alert.alert('멘토링 신청', '멘토링 지원이 완료되었습니다.');
+    //     }},
+    //   ],
+    //   {cancelable: false},
+    // );
+    // return;
     const { question, token } = this.state;
     // console.warn(true)
     try {
@@ -279,22 +279,21 @@ class QuestionView extends Component {
   }
 
   onPressApprove = async requestID => {
-    Alert.alert(
-      '멘토링 승인',
-      '정말 송지호 님의 멘토링을 승인하시겠습니까?',
-      [
-        {
-          text: '아니요',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {text: '예', onPress: () => {
-          Alert.alert('멘토링 승인', '멘토링 승인이 완료되었습니다.');
-        }},
-      ],
-      {cancelable: false},
-    );
-    return;
+    // Alert.alert(
+    //   '멘토링 승인',
+    //   '정말 송지호 님의 멘토링을 승인하시겠습니까?',
+    //   [
+    //     {
+    //       text: '아니요',
+    //       onPress: () => console.log('Cancel Pressed'),
+    //       style: 'cancel',
+    //     },
+    //     {text: '예', onPress: () => {
+    //       Alert.alert('멘토링 승인', '멘토링 승인이 완료되었습니다.');
+    //     }},
+    //   ],
+    //   {cancelable: false},
+    // );
     const { question, token } = this.state;
     // console.warn(true)
     try {
@@ -350,8 +349,8 @@ class QuestionView extends Component {
                   </Text>
                 </View>
                 <Image
-                  // source={{uri: question.photo}}
-                  source={question.image}
+                  source={{uri: question.photo}}
+                  // source={question.image}
                   resizeMode="cover"
                   style={styles.photo}
                 />
@@ -371,8 +370,8 @@ class QuestionView extends Component {
                   >
                     <View style={styles.profileInfo}>
                       <Image
-                        // source={{uri: item.user.photo}}
-                        source={item.user.image}
+                        source={{uri: item.user.photo}}
+                        // source={item.user.image}
                         resizeMode="cover"
                         style={styles.profile}
                       />

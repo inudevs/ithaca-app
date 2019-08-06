@@ -156,7 +156,7 @@ class HomeScreen extends Component {
     this.state = {
       token: '',
       questions: [],
-      questions: exampleQuestionData,
+      // questions: exampleQuestionData,
       filters: subjects,
       filterShow: false,
       filterStart: false,
@@ -168,34 +168,34 @@ class HomeScreen extends Component {
   }
 
   async componentDidMount () {
-    // if (!this.state.token) {
-    //   let token = '';
-    //   try {
-    //     token = await AsyncStorage.getItem('token')
-    //   } catch(e) {
-    //     Alert.alert('토큰 없음ㅋㅋ', JSON.stringify(e));
-    //     // await AsyncStorage.removeItem('token')
-    //     this.props.navigation.navigate('Login')
-    //   }
-    //   try {
-    //     res = await API.get('/question/', {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     })
-    //     this.setState({
-    //       questions: res.data.questions,
-    //       token: token,
-    //     })
-    //   } catch(error) {
-    //     if (error.response.status !== 200) {
-    //       // Mostly 401
-    //       // 토큰 만료됨
-    //       await AsyncStorage.removeItem('token')
-    //       this.props.navigation.navigate('Login')
-    //     }
-    //   }
-    // }
+    if (!this.state.token) {
+      let token = '';
+      try {
+        token = await AsyncStorage.getItem('token')
+      } catch(e) {
+        Alert.alert('토큰 없음ㅋㅋ', JSON.stringify(e));
+        // await AsyncStorage.removeItem('token')
+        this.props.navigation.navigate('Login')
+      }
+      try {
+        res = await API.get('/question/', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        this.setState({
+          questions: res.data.questions,
+          token: token,
+        })
+      } catch(error) {
+        if (error.response.status !== 200) {
+          // Mostly 401
+          // 토큰 만료됨
+          await AsyncStorage.removeItem('token')
+          this.props.navigation.navigate('Login')
+        }
+      }
+    }
   }
 
   onPressFilter = () => {
@@ -260,8 +260,8 @@ class HomeScreen extends Component {
                     </Text>
                   </View>
                   <Image
-                    // source={{uri: item.photo}}
-                    source={item.image}
+                    source={{uri: item.photo}}
+                    // source={item.image}
                     resizeMode="cover"
                     style={styles.photo}
                   />

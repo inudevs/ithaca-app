@@ -199,31 +199,31 @@ class MyPage extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // mentorings: {},
-      mentorings: {
-        user: exampleProfile,
-        mentor: [],
-        mentee: [
-          {
-            image: require('../assets/examples/math.png'),
-            title: '이 문제의 풀이과정을 잘 모르겠습니다.',
-            views: 30,
-            answers: 3,
-            state: 'M',
-            timestamp: 1564975538,
-          },
-          {
-            image: require('../assets/examples/english.png'),
-            title: '이게 무슨문제죠...?',
-            views: 10,
-            answers: 1,
-            state: 'C',
-            timestamp: 1564550000,
-          },
-        ],
-      },
-      // loaded: false,
-      loaded: true,
+      mentorings: {},
+      // mentorings: {
+      //   user: exampleProfile,
+      //   mentor: [],
+      //   mentee: [
+      //     {
+      //       image: require('../assets/examples/math.png'),
+      //       title: '이 문제의 풀이과정을 잘 모르겠습니다.',
+      //       views: 30,
+      //       answers: 3,
+      //       state: 'M',
+      //       timestamp: 1564975538,
+      //     },
+      //     {
+      //       image: require('../assets/examples/english.png'),
+      //       title: '이게 무슨문제죠...?',
+      //       views: 10,
+      //       answers: 1,
+      //       state: 'C',
+      //       timestamp: 1564550000,
+      //     },
+      //   ],
+      // },
+      loaded: false,
+      // loaded: true,
       token: '',
       user: {},
       tab: 0,
@@ -231,8 +231,7 @@ class MyPage extends Component {
   }
 
   async componentDidMount() {
-    // if (!this.state.token) {
-    if (false) {
+    if (!this.state.token) {
       let token = '';
       try {
         token = await AsyncStorage.getItem('token')
@@ -271,8 +270,8 @@ class MyPage extends Component {
             return (<View style={{marginBottom: 150,}}>
               <View style = {styles.profile}>
               <Image
-                // source={{uri: mentorings.user.photo}}
-                source={mentorings.user.image}
+                source={{uri: mentorings.user.photo}}
+                // source={mentorings.user.image}
                 resizeMode="cover"
                 style={styles.profileimage}
               />
