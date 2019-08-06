@@ -16,7 +16,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-
+import AsyncStorage from '@react-native-community/async-storage';
 import API from '../api';
 import moment from '../time.js';
 import Navbar from '../components/Navbar';
@@ -142,6 +142,7 @@ class HomeScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      token: '',
       questions: exampleQuestionData,
       filters: subjects,
       filterShow: false,
@@ -151,6 +152,34 @@ class HomeScreen extends Component {
     this.onSelectSubject = this.onSelectSubject.bind(this);
     this.applyFilter = this.applyFilter.bind(this);
     this.initFilter = this.initFilter.bind(this);
+  }
+
+  async componentDidMount () {
+    if (!this.state.token) {
+      let token = '';
+      try {
+        token = await AsyncStorage.getItem('token')
+      } catch(e) {
+        Alert.alert('토큰 없음ㅋㅋ', JSON.stringify(e));
+        // await AsyncStorage.removeItem('token')
+        this.props.navigation.navigate('Login')       
+      }
+      try {
+        res = await API.get('/question/', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        Alert.alert('', JSON.stringify(res.data));
+      } catch(error) {
+        if (error.response.status !== 200) {
+          // Mostly 401
+          // 토큰 만료됨
+          await AsyncStorage.removeItem('token')
+          this.props.navigation.navigate('Login')
+        }
+      }
+    }
   }
 
   onPressFilter = () => {
