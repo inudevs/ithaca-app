@@ -163,6 +163,13 @@ class JoinScreen extends Component {
   };
 
   onPressNext = () => {
+    const { step } = this.state;
+    if (step === 2) {
+      const { school, schoolSelected } = this.state;
+      if (!school || !schoolSelected) {
+        return Alert.alert('잠깐!', '올바른 학교 이름인지 확인해 주세요.');
+      }
+    }
     this.setState((prev) => {
       return { step: prev.step + 1 }
     });
@@ -215,9 +222,9 @@ class JoinScreen extends Component {
               </View>
               <SchoolSearch
                 value={this.state.school}
-                selected={this.state.selected}
+                selected={this.state.schoolSelected}
                 onChangeValue={(school) => this.setState({ school })}
-                onChangeSelected={(selected) => this.setState({ selected })}
+                onChangeSelected={(schoolSelected) => this.setState({ schoolSelected })}
                 placeholder="학교 이름을 검색하세요"
               />
             </View>)
@@ -243,7 +250,7 @@ class JoinScreen extends Component {
         })()}
         <FlatButton
           text="다음으로"
-          onPress={this.onPressNext}
+          onPress={() => this.onPressNext(step)}
           style={styles.nextButton}
         />
       </View>
