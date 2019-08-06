@@ -73,7 +73,7 @@ const exampleList = [
       mentee: { name: '여준호' },
       mentor: { name: '송지호' },
     },
-    image: require('../assets/examples/profile.png'),
+    image: require('../assets/examples/song.jpg'),
     timestamp: 1564975538,
   },
   {
@@ -85,7 +85,7 @@ const exampleList = [
       mentee: { name: '여준호' },
       mentor: { name: '우상윤' },
     },
-    image: require('../assets/examples/profile.png'),
+    image: require('../assets/examples/yoon.jpg'),
     timestamp: 1564975538,
   },
   {
@@ -97,7 +97,7 @@ const exampleList = [
       mentee: { name: '여준호' },
       mentor: { name: '천예준' },
     },
-    image: require('../assets/examples/profile.png'),
+    image: require('../assets/examples/cute.jpg'),
     timestamp: 1564975538,
   },
   {
@@ -109,7 +109,7 @@ const exampleList = [
       mentee: { name: '여준호' },
       mentor: { name: '백은서' },
     },
-    image: require('../assets/examples/profile.png'),
+    image: require('../assets/examples/eun.jpeg'),
     timestamp: 1564975538,
   },
 ];

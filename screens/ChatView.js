@@ -160,50 +160,59 @@ const styles = StyleSheet.create({
 const exampleChatData = [
   {
     id: '5d483792caa95227384f96da',
+    type: 'text',
+    sender: 'mentor',
+    timestamp: 1565113441,
+    message: '이 문제는 실수 조건이 있는 이차식의 최대, 최소를 구하는 문제네요!',
+  },
+  {
+    id: '5d483792caa95227384f96da',
+    type: 'text',
+    sender: 'mentee',
+    timestamp: 1565114441,
+    message: '식을 보면 이차식인건 알겠는데, 풀이 접근 방식을 잘 생각해내지 못하겠네요...',
+  },
+  {
+    id: '5d483792caa95227384f96da',
+    type: 'text',
+    sender: 'mentor',
+    timestamp: 1565115441,
+    message: '자세히 살펴보면, x^2 ≥ 0 (단, x ∈ R)라는 절대 부등식을 이용해 문제를 풀어낼 수 있습니다. 주어진 이차식은 x, y와 관해 이차식을 형성하고 있으므로 a(x+b)^2 + c(x+d)^2 + e의 형태로 변형이 가능합니다.',
+  },
+  {
+    id: '5d483792caa95227384f96da',
+    type: 'text',
+    sender: 'mentee',
+    timestamp: 1565115641,
+    message: '식을 변형해보니 2(x-1)^2 + 3(y+1)^2 + 5라는 식이 나오네요.',
+  },
+  {
+    id: '5d483792caa95227384f96da',
+    type: 'text',
+    sender: 'mentor',
+    timestamp: 1565115741,
+    message: '그렇다면 x, y가 모두 실수이므로 2(x-1)^2 + 3(y+1)^2 ≥ 5 이 성립하겠네요. 즉 문제의 해답은 5 입니다. 이 문제와 관련해 원뿔 곡선과 음함수 표현에 대하여 살펴봐도 좋을것 같아요',
+  },
+  {
+    id: '5d483792caa95227384f96da',
+    type: 'text',
+    sender: 'mentee',
+    timestamp: 1565115841,
+    message: '새로운 정보 감사합니다!',
+  },
+  {
+    id: '5d483792caa95227384f96da',
     type: 'image',
     sender: 'mentor',
-    timestamp: 1565013906,
-    image: 'https://via.placeholder.com/150',
+    timestamp: 1565115941,
+    image: require('../assets/examples/plot.png'),
   },
   {
     id: '5d483792caa95227384f96da',
     type: 'text',
     sender: 'mentor',
-    timestamp: 1565013906,
-    message: '이 부분은 이렇게 해서 푸는 거에요.',
-    image: '',
-  },
-  {
-    id: '5d483792caa95227384f96da',
-    type: 'text',
-    sender: 'mentee',
-    timestamp: 1565013906,
-    message: '아하! 근데 저 부분 공식이 틀린 거 같아요.',
-    image: '',
-  },
-  {
-    id: '5d483792caa95227384f96da',
-    type: 'text',
-    sender: 'mentor',
-    timestamp: 1565013906,
-    message: '앗.. 그런가요? 저가 했을 땐 괜찮은 것 같은데..?',
-    image: '',
-  },
-  {
-    id: '5d483792caa95227384f96da',
-    type: 'text',
-    sender: 'mentee',
-    timestamp: 1565013906,
-    message: '그럼 선생님 리뷰를 요청해볼까요?',
-    image: '',
-  },
-  {
-    id: '5d483792caa95227384f96da',
-    type: 'text',
-    sender: 'mentor',
-    timestamp: 1565013906,
-    message: '네! 리뷰를 원하는 메시지를 꾹 누르면 리뷰를 요청할 수 있어요.',
-    image: '',
+    timestamp: 1565115941,
+    message: '울프럼 알파로 그린 3D plot 그림인데, 함께 참고하시면 좋을 것 같아서 올립니다!',
   },
 ]
 
@@ -386,7 +395,7 @@ class ChatView extends Component {
                           </Text>;
                         } else {
                           return <Image
-                            source={{uri:item.image}}
+                            source={item.image}
                             resizeMode='cover'
                             style={(item.sender === mine) ? 
                               styles.myImage : styles.yourImage}

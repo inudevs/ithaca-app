@@ -103,13 +103,13 @@ class WriteScreen extends Component {
     this.state = {
       category: '수학',
       photo: null,
-      title: ' 이거 진짜 아무리 봐도 모르겠어요ㅜ',
-      article: '역함수에 대한 개념이 부족합니다! 잘 설명해 주실 수 있는 분이 계실까요?',
+      title: '이 문제 모르겠어요....',
+      article: '어떻게 접근해야 할지 모르겠어요ㅜㅠ',
     }
 
     this.onSubmit = this.onSubmit.bind(this);
     this.handleChoosePhoto = this.handleChoosePhoto.bind(this);
-  }r
+  }
 
   async onSubmit () {
     Alert.alert('질문 등록', '질문을 등록했습니다!')

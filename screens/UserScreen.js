@@ -267,7 +267,7 @@ class MyPage extends Component {
             return (<View style={{marginBottom: 150,}}>
               <View style = {styles.profile}>
               <Image
-                source={require('../assets/examples/profile.png')}
+                source={{uri: mentorings.user.photo}}
                 resizeMode="cover"
                 style={styles.profileimage}
               />

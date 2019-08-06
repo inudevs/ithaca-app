@@ -74,28 +74,28 @@ const styles = StyleSheet.create({
 const exampleAlarm = [
   {
     context: '지원',
-    user: '여준호',
-    timestamp: 1564975538,
-    image: require('../assets/examples/profile.png'),
+    user: '송지호',
+    timestamp: 1565114231,
+    image: require('../assets/examples/song.jpg'),
   },
   {
     context: '지원',
     user: '우상윤',
-    timestamp: 1564975538,
-    image: require('../assets/examples/profile.png'),
+    timestamp: 1565114131,
+    image: require('../assets/examples/yoon.jpg'),
   },
   {
-    context: '수락',
-    user: '여준호',
-    timestamp: 1564975538,
-    image: require('../assets/examples/profile.png'),
-  },
-  {
-    context: '수락',
+    context: '지원',
     user: '천예준',
-    timestamp: 1564975538,
-    image: require('../assets/examples/profile.png'),
-  }
+    timestamp: 1565113331,
+    image: require('../assets/examples/cute.jpg'),
+  },
+  {
+    context: '지원',
+    user: '백은서',
+    timestamp: 1565112331,
+    image: require('../assets/examples/eun.jpeg'),
+  },
 ]
 
 class Alarm extends Component {
