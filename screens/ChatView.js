@@ -15,11 +15,15 @@ import {
   Text,
   Image,
   TouchableWithoutFeedback,
+  TextInput,
+  Modal,
+  TouchableHighlight,
 } from 'react-native';
 
 import API from '../api';
 import moment from '../time.js';
 import DefaultHeader from '../components/DefaultHeader';
+import TextareaInput from '../components/TextareaInput';
 
 const win = Dimensions.get('window');
 
@@ -78,12 +82,16 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 0,
   },
   yourImage: {
-    maxWidth: (win.width * 0.7),
+    width: (win.width * 0.5),
+    height: (win.width * 0.5),
+    borderRadius: chatFontSize,
     borderTopLeftRadius: 0,
   },
   myImage: {
-    maxWidth: (win.width * 0.75),
+    width: (win.width * 0.5),
+    height: (win.width * 0.5),
     alignSelf: 'flex-end',
+    borderRadius: chatFontSize,
     borderTopRightRadius: 0,
   },
   chatText: {
@@ -108,10 +116,55 @@ const styles = StyleSheet.create({
   },
   myChatTimestamp: {
     marginRight: 4,
+  },
+  textbox: {
+    backgroundColor: '#e9ecef',
+    width: (win.width * 0.8),
+    paddingHorizontal: 20,
+    // alignSelf: 'center',
+    marginBottom: 20,
+    height: 50,
+  },
+  input: {
+    fontFamily: 'NotoSansCJKkr-Regular',
+    fontSize: 15,
+    lineHeight: 15 * 1.4,
+    paddingTop: 0,
+    paddingBottom: 0,
+  },
+  inputBox: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  send: {
+    backgroundColor: primaryColor,
+    borderRadius: 20,
+    height: 40,
+    width: 60,
+    marginTop: 8,
+    marginLeft: 5,
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  sendText: {
+    fontFamily: 'NotoSansCJKkr-Bold',
+    fontSize: 15,
+    lineHeight: 15 * 1.4,
+    color: 'white',
+    // marginHorizontal: 10,
+    // marginVertical: 8,
   }
 });
 
 const exampleChatData = [
+  {
+    id: '5d483792caa95227384f96da',
+    type: 'image',
+    sender: 'mentor',
+    timestamp: 1565013906,
+    image: 'https://via.placeholder.com/150',
+  },
   {
     id: '5d483792caa95227384f96da',
     type: 'text',
@@ -152,14 +205,6 @@ const exampleChatData = [
     message: '네! 리뷰를 원하는 메시지를 꾹 누르면 리뷰를 요청할 수 있어요.',
     image: '',
   },
-  {
-    id: '5d483792caa95227384f96da',
-    type: 'image',
-    sender: 'mentor',
-    timestamp: 1565013906,
-    message: '',
-    image: 'https://via.placeholder.com/150',
-  },
 ]
 
 class ChatView extends Component {
@@ -174,69 +219,211 @@ class ChatView extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mentor: { 
-        name: '우상윤',
-      },
-      mentee: {
-        name: '여준호',
-      },
+      users: {},
       mine: 'mentee',
       chats: exampleChatData,
+      loaded: false,
+      message: '',
+      modalVisible: false,
     };
+    this.onSendChat = this.onSendChat.bind(this);
+    this.openTeacher = this.openTeacher.bind(this);
+  }
 
+  async componentDidMount() {
+    const loaded = true
+    const { navigation } = this.props;
+    const users = JSON.parse(navigation.getParam('user', 
+      '{"mentor":{"name":"송지호"},"mentee":{"name":"여준호"}}'));
+    this.setState({ users, loaded });
+    // const token = navigation.getParam('token', 'NO-TOKEN');
+
+    const { mine } = this.state;
     // API 호출 성공 시, 네비게이션 바 제목을 상대방 이름으로 설정
-    const { mine, mentor, mentee } = this.state;
+    const { mentor, mentee } = users;
     this.props.navigation.setParams({
       'title': (mine !== 'mentor') ? mentor.name : mentee.name})
   }
 
+  onSendChat = () => {
+    let { chats, message } = this.state;
+    if (!message) return;
+    chats.push({
+      id: '5d483792caa95227384f96da',
+      type: 'text',
+      sender: 'mentee',
+      timestamp: moment().unix(),
+      message,
+    })
+    this.setState({
+      chats,
+      message: ''
+    })
+  }
+
+  openTeacher = (visible) => {
+    this.setState({modalVisible: visible});
+  }
+
   render() {
-    const { mine } = this.state;
+    const { mine, loaded } = this.state;
     return (
       <View style={styles.container}>
         <ScrollView 
           ref="scrollView"
           onContentSizeChange={(_, height) => this.refs.scrollView.scrollTo({y: height})}
         >
-          <View style={styles.chats}>
-            <Text style={styles.help}>멘토링이 시작되었습니다.</Text>
-            {this.state.chats.map((item, idx) => (
-              <TouchableWithoutFeedback key={idx}>
-                <View style={[styles.chatWrap, 
-                  (item.sender === mine) ? 
-                    styles.myChatWrap : styles.yourChatWrap]}
-                >
-                  <View style={[styles.chat, 
-                    (item.sender === mine) ? 
-                      styles.myChat : styles.yourChat]}
-                  >
-                    {(item.type === 'text') ? 
-                    <Text style={[styles.chatText, 
-                      (item.sender === mine) ? 
-                        styles.myChatText : styles.yourChatText]}
-                    >
-                      {item.message}
-                    </Text> :
-                  <Image
-                    source='https://via.placeholder.com/300'
-                    resizeMode='cover'
-                    style={[styles.chatText, 
-                      (item.sender === mine) ? 
-                      styles.myImage : styles.yourImage]}
-                  />
-                  }
-                  </View>
-                  <Text style={[styles.chatTimestamp, 
-                    (item.sender === mine) ? 
-                      styles.myChatTimestamp : styles.yourChatTimestamp]}
-                  >
-                    {moment.unix(item.timestamp).format('a hh:mm')}
-                  </Text>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={this.state.modalVisible}
+            // onRequestClose={() => {
+            //   Alert.alert('Modal has been closed.');
+            // }}
+          >
+            <View style={{
+                marginTop: 120, backgroundColor: 'white', marginHorizontal: 20,
+                shadowColor: "#000",
+                shadowOffset: { width: 0, height: 3, }, 
+                shadowOpacity: 0.27, shadowRadius: 4.65, elevation: 6,
+                paddingHorizontal: 20,
+                paddingVertical: 20,
+                borderRadius: 20,
+              }}
+            >
+              <View>
+                <Text style={{
+                  fontFamily: 'NotoSansCJKkr-Bold',
+                  fontSize: 20,
+                  lineHeight: 20 * 1.4,
+                  color: primaryColor,
+                }}>선생님 리뷰 요청</Text>
+
+                <TextInput
+                  editable={true}
+                  // onChangeText={onChangeText}
+                  // value={value}
+                  style={[styles.textbox, styles.input, {
+                    borderRadius: 10,
+                    marginTop: 10,
+                  }]}
+                  inputProps={styles.input}
+                  placeholder="선생님께 질문해 보세요."
+                  numberOfLines={5}
+                  multiline={true}
+                />
+
+                <View style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}>
+                  <TouchableHighlight
+                    style={{
+                      alignSelf: 'center',
+                      backgroundColor: highlightColor,
+                      borderRadius: 20,
+                      paddingHorizontal: 10,
+                      paddingVertical: 8,
+                      shadowColor: "#000",
+                      shadowOffset: { width: 2, height: 3, }, 
+                      shadowOpacity: 0.5, shadowRadius: 4.65, elevation: 6,
+                    }}
+                    onPress={() => {
+                      this.openTeacher(!this.state.modalVisible);
+                    }}>
+                    <Text style={{fontFamily: 'NotoSansCJKkr-Regular',
+                      fontSize: 15,
+                      lineHeight: 15 * 1.4,
+                      color: '#fff',}}>전송</Text>
+                  </TouchableHighlight>
+
+                  <TouchableHighlight
+                    style={{
+                      marginLeft: 5,
+                      alignSelf: 'center',
+                      backgroundColor: '#fff',
+                      borderRadius: 20,
+                      paddingHorizontal: 10,
+                      paddingVertical: 8,
+                      shadowColor: "#000",
+                      shadowOffset: { width: 2, height: 3, }, 
+                      shadowOpacity: 0.5, shadowRadius: 4.65, elevation: 6,
+                    }}
+                    onPress={() => {
+                      this.openTeacher(!this.state.modalVisible);
+                    }}>
+                    <Text style={{fontFamily: 'NotoSansCJKkr-Regular',
+                      fontSize: 15,
+                      lineHeight: 15 * 1.4,
+                      color: '#000',}}>닫기</Text>
+                  </TouchableHighlight>
                 </View>
-              </TouchableWithoutFeedback>
-            ))}
-          </View>
+              </View>
+            </View>
+          </Modal>
+          {(() => {
+            if (loaded) {
+              return <View style={styles.chats}>
+              <Text style={styles.help}>멘토링이 시작되었습니다.</Text>
+              {this.state.chats.map((item, idx) => (
+                <TouchableWithoutFeedback key={idx} onLongPress={() => this.openTeacher(true)}>
+                  <View style={[styles.chatWrap, 
+                    (item.sender === mine) ? 
+                      styles.myChatWrap : styles.yourChatWrap]}
+                  >
+                    <View style={[styles.chat, 
+                      (item.sender === mine) ? 
+                        styles.myChat : styles.yourChat]}
+                    >
+                      {(() => {
+                        if (item.type === 'text') {
+                          return <Text style={[styles.chatText, 
+                            (item.sender === mine) ? 
+                              styles.myChatText : styles.yourChatText]}
+                          >
+                            {item.message}
+                          </Text>;
+                        } else {
+                          return <Image
+                            source={{uri:item.image}}
+                            resizeMode='cover'
+                            style={(item.sender === mine) ? 
+                              styles.myImage : styles.yourImage}
+                          />;
+                        }
+                      })()}
+                    </View>
+                    <Text style={[styles.chatTimestamp, 
+                      (item.sender === mine) ? 
+                        styles.myChatTimestamp : styles.yourChatTimestamp]}
+                    >
+                      {moment.unix(item.timestamp).format('a hh:mm')}
+                    </Text>
+                  </View>
+                </TouchableWithoutFeedback>
+              ))}
+            </View>
+            }
+          })()}
         </ScrollView>
+        <View style={styles.inputBox}>
+          <TextInput
+            editable={true}
+            onChangeText={(message) => this.setState({ message })}
+            value={this.state.message}
+            style={[styles.textbox, styles.input]}
+            inputProps={styles.input}
+            placeholder="메세지를 입력하세요."
+          />
+          <TouchableWithoutFeedback
+            onPress={() => this.onSendChat()}
+          >
+            <View style={styles.send}>
+              <Text style={styles.sendText}>전송</Text>
+            </View>
+          </TouchableWithoutFeedback>
+        </View>
       </View>
     );
   }

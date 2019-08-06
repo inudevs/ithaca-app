@@ -69,14 +69,10 @@ const exampleList = [
     klass: 5,
     num: 15,
     name: '송지호',
-    image: require('../assets/examples/profile.png'),
-    timestamp: 1564975538,
-  },
-  {
-    grade: 1,
-    klass: 5,
-    num: 20,
-    name: '여준호',
+    user: {
+      mentee: { name: '여준호' },
+      mentor: { name: '송지호' },
+    },
     image: require('../assets/examples/profile.png'),
     timestamp: 1564975538,
   },
@@ -85,6 +81,10 @@ const exampleList = [
     klass: 5,
     num: 22,
     name: '우상윤',
+    user: {
+      mentee: { name: '여준호' },
+      mentor: { name: '우상윤' },
+    },
     image: require('../assets/examples/profile.png'),
     timestamp: 1564975538,
   },
@@ -93,6 +93,10 @@ const exampleList = [
     klass: 4,
     num: 32,
     name: '천예준',
+    user: {
+      mentee: { name: '여준호' },
+      mentor: { name: '천예준' },
+    },
     image: require('../assets/examples/profile.png'),
     timestamp: 1564975538,
   },
@@ -101,6 +105,10 @@ const exampleList = [
     klass: 4,
     num: 16,
     name: '백은서',
+    user: {
+      mentee: { name: '여준호' },
+      mentor: { name: '백은서' },
+    },
     image: require('../assets/examples/profile.png'),
     timestamp: 1564975538,
   },
@@ -120,7 +128,11 @@ class Mentor extends Component {
     return(
       <View style={styles.container}>
         {list.map((item, idx) => (
-          <TouchableOpacity style={styles.list}>
+          <TouchableOpacity style={styles.list} key={idx}
+            onPress={() => this.props.navigation.navigate('Chat', { 
+              users: JSON.stringify(item.user)
+            })}
+          >
             <Image
               source={item.image}
               resizeMode='cover'
