@@ -8,13 +8,13 @@ import {
   TouchableNativeFeedback,
 } from 'react-native';
 import TextboxInput from '../components/TextboxInput';
+import API from '../api';
 
 const win = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   list: {
     justifyContent: 'center',
-    alignContent: 'center',
     alignItems: 'center',
   },
   item: {
@@ -38,90 +38,75 @@ const styles = StyleSheet.create({
 
 class SchoolSearch extends Component {
   static defaultProps = {
-    data: [],
     value: '',
-    onChangeText: () => {},
+    selected: false,
+    onChangeValue: () => {},
+    onChangeSelected: () => {},
     placeholder: '',
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      filteredData: [],
-      showData: false,
-      userInput: ''
+      dataList: [],
     };
+    this.updateResult = this.updateResult.bind(this);
+    this.onChangeText = this.onChangeText.bind(this);
   }
 
-  onChange = (text) => {
-    const { data } = this.props;
-    const userInput = text;
+  updateResult = (query) => {
+    API.get(`/search/school/${query}`)
+      .then((res) => {
+        this.setState({
+          dataList: res.data
+        })
+      });
+  }
 
-    const filteredData = data.filter(
-      suggestion =>
-        suggestion.toLowerCase().indexOf(userInput.toLowerCase()) > -1
-    ).slice(0, 3);
+  onChangeText = (text) => {
+    if (this.state.dataList[0] != this.props.value)
+      this.props.onChangeSelected(false);
+    if (text) this.updateResult(text);
+    this.props.onChangeValue(text);
+  }
 
-    this.setState({
-      filteredData,
-      showData: true,
-      userInput: text
-    });
-  };
-
-  onClick = (text) => {
-    this.setState({
-      filteredData: [],
-      showData: false,
-      userInput: text
-    });
-  };
+  onSelect = (text) => {
+    if (!this.props.selected)
+      this.props.onChangeSelected(true);
+    if (text) this.updateResult(text);
+    this.props.onChangeValue(text);
+  }
 
   render() {
-    const {
-      onChange,
-      onClick,
-      state: {
-        filteredData,
-        showData,
-        userInput
-      }
-    } = this;
-
-    let dataListComponent;
-
-    if (showData && userInput) {
-      if (filteredData.length) {
-        dataListComponent = (
-          <View style={styles.list}>
-            {filteredData.map((suggestion, index) => {
-              return (
-                  <TouchableNativeFeedback
-                    onPress={() => onClick(suggestion)}
-                    key={index}
-                  >
-                    <View style={[styles.item,
-                      (index === suggestion.length - 1) ? {} : styles.itemNotLast ]}>
-                      <Text style={styles.itemText}>
-                        {suggestion}
-                      </Text>
-                    </View>
-                  </TouchableNativeFeedback>
-              );
-            })}
-          </View>
-        );
-      }
-    }
-
+    const { dataList } = this.state;
+    const { selected } = this.props;
     return (
       <Fragment>
         <TextboxInput
-          onChangeText={(text) => onChange(text)}
-          value={userInput}
+          onChangeText={(text) => this.onChangeText(text)}
+          value={this.props.value}
           noMargin={true}
+          placeholder={this.props.placeholder}
         />
-        {dataListComponent}
+        <View style={styles.list}>
+          {(() => {
+            if (!selected) {
+              return dataList.map((school, idx) => {
+                return (<TouchableNativeFeedback
+                  onPress={() => this.onSelect(school)}
+                  key={idx}
+                >
+                  <View style={[styles.item,
+                    (idx === dataList.length - 1) ? {} : styles.itemNotLast ]}>
+                    <Text style={styles.itemText}>
+                      {school}
+                    </Text>
+                  </View>
+                </TouchableNativeFeedback>);
+              })
+            }
+          })()}
+        </View>
       </Fragment>
     );
   }

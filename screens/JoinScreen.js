@@ -135,6 +135,7 @@ class JoinScreen extends Component {
       phone: '',
       birth: '',
       school: '',
+      schoolSelected: false,
       grade: '',
       klass: '',
       number: '',
@@ -145,20 +146,20 @@ class JoinScreen extends Component {
   }
 
   async onSubmit (event) {
-    event.preventDefault();
-    const { name, school, grade, klass, photo, email, password } = this.state;
-    try {
-      const { data } = await API.post('/auth/join', { name, school, grade, klass, photo, email, password });
-      Alert.alert(
-        'Success', JSON.stringify(data)
-      );
-    } catch (error) {
-      if (error.response.status_code === 400){
-        Alert.alert('잘못된 요청');
-      } else {
-        Alert.alert('에러')
-      }
-    };
+    // event.preventDefault();
+    // const { name, school, grade, klass, photo, email, password } = this.state;
+    // try {
+    //   const { data } = await API.post('/auth/join', { name, school, grade, klass, photo, email, password });
+    //   Alert.alert(
+    //     'Success', JSON.stringify(data)
+    //   );
+    // } catch (error) {
+    //   if (error.response.status_code === 400){
+    //     Alert.alert('잘못된 요청');
+    //   } else {
+    //     Alert.alert('에러')
+    //   }
+    // };
   };
 
   onPressNext = () => {
@@ -213,9 +214,10 @@ class JoinScreen extends Component {
                 <Text style={styles.stepHelp}>학교를 선택해주세요.</Text>
               </View>
               <SchoolSearch
-                data={["한국게임과학고등학교","한국경마축산고등학교","한국경진학교","한국과학영재학교","한국관광고등학교"]}
                 value={this.state.school}
-                onChangeText={(school) => this.setState({ school })}
+                selected={this.state.selected}
+                onChangeValue={(school) => this.setState({ school })}
+                onChangeSelected={(selected) => this.setState({ selected })}
                 placeholder="학교 이름을 검색하세요"
               />
             </View>)
