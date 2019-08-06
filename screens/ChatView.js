@@ -77,6 +77,15 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     borderTopRightRadius: 0,
   },
+  yourImage: {
+    maxWidth: (win.width * 0.7),
+    borderTopLeftRadius: 0,
+  },
+  myImage: {
+    maxWidth: (win.width * 0.75),
+    alignSelf: 'flex-end',
+    borderTopRightRadius: 0,
+  },
   chatText: {
     fontFamily: 'NotoSansCJKkr-Regular',
     fontSize: chatFontSize,
@@ -109,6 +118,7 @@ const exampleChatData = [
     sender: 'mentor',
     timestamp: 1565013906,
     message: '이 부분은 이렇게 해서 푸는 거에요.',
+    image: '',
   },
   {
     id: '5d483792caa95227384f96da',
@@ -116,6 +126,7 @@ const exampleChatData = [
     sender: 'mentee',
     timestamp: 1565013906,
     message: '아하! 근데 저 부분 공식이 틀린 거 같아요.',
+    image: '',
   },
   {
     id: '5d483792caa95227384f96da',
@@ -123,6 +134,7 @@ const exampleChatData = [
     sender: 'mentor',
     timestamp: 1565013906,
     message: '앗.. 그런가요? 저가 했을 땐 괜찮은 것 같은데..?',
+    image: '',
   },
   {
     id: '5d483792caa95227384f96da',
@@ -130,6 +142,7 @@ const exampleChatData = [
     sender: 'mentee',
     timestamp: 1565013906,
     message: '그럼 선생님 리뷰를 요청해볼까요?',
+    image: '',
   },
   {
     id: '5d483792caa95227384f96da',
@@ -137,6 +150,15 @@ const exampleChatData = [
     sender: 'mentor',
     timestamp: 1565013906,
     message: '네! 리뷰를 원하는 메시지를 꾹 누르면 리뷰를 요청할 수 있어요.',
+    image: '',
+  },
+  {
+    id: '5d483792caa95227384f96da',
+    type: 'image',
+    sender: 'mentor',
+    timestamp: 1565013906,
+    message: '',
+    image: 'https://via.placeholder.com/150',
   },
 ]
 
@@ -188,12 +210,21 @@ class ChatView extends Component {
                     (item.sender === mine) ? 
                       styles.myChat : styles.yourChat]}
                   >
+                    {(item.type === 'text') ? 
                     <Text style={[styles.chatText, 
                       (item.sender === mine) ? 
                         styles.myChatText : styles.yourChatText]}
                     >
                       {item.message}
-                    </Text>
+                    </Text> :
+                  <Image
+                    source='https://via.placeholder.com/300'
+                    resizeMode='cover'
+                    style={[styles.chatText, 
+                      (item.sender === mine) ? 
+                      styles.myImage : styles.yourImage]}
+                  />
+                  }
                   </View>
                   <Text style={[styles.chatTimestamp, 
                     (item.sender === mine) ? 

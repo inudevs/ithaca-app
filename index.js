@@ -59,7 +59,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Mentor',
+    initialRouteName: 'Home',
     // transitionConfig: () => ({
     //   transitionSpec: {
     //     duration: 0,
